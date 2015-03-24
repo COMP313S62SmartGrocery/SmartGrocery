@@ -1,0 +1,29 @@
+Users:
+   POST(UserId, password, {AUTH_KEY}) : bool
+   GET(UserId, Password) : AUTH_KEY
+   GetSessionKey(AUTH_KEY) : SESSION_KEY, Expiry : Date
+   DELETE(UserId, Password) : bool
+
+//requires session key
+Templates:
+   Get(templateId) : template
+   Post(template, [templateItems])
+   Delete(templateId) : bool
+
+Lists:
+   GET : [List]
+   POST(Name) : int
+   DELETE(NAME) : bool
+   PUT(Name) : bool
+   
+
+ListItems:
+   GET(listId) : [ListItems]
+   POST(ListItem, ListId) : bool
+   PUT(ListItem) : bool
+   DELETE(ListItem) : bool
+
+ListHistory:
+   GET(Name) : [ ListItem ]
+   POST(ListITem) : bool
+   DELETE (Name) : bool
