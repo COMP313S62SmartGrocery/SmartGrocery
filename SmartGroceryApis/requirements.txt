@@ -1,14 +1,14 @@
 Users:
-   POST(UserId, password, {AUTH_KEY}) : bool
-   GET(UserId, Password) : AUTH_KEY
-   GetSessionKey(AUTH_KEY) : SESSION_KEY, Expiry : Date
+   Get(AUTH_KEY) : SESSION_KEY, Expiry : Date
+   POST(UserId, password, IsNew): AUTH_KEY
    DELETE(UserId, Password) : bool
+   PUT(USerId, Password, NewPassword) : bool
 
 //requires session key
 Templates:
-   Get(templateId) : template
-   Post(template, [templateItems])
-   Delete(templateId) : bool
+   GET(templateId) : template
+   POST(template, [templateItems])
+   DELETE(templateId) : bool
 
 Lists:
    GET : [List]
