@@ -1,0 +1,69 @@
+﻿using SmartGroceryApiLibrary.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.Serialization;
+using System.ServiceModel;
+using System.ServiceModel.Web;
+using System.Text;
+
+namespace SmartGroceryApiLibrary
+{
+    // NOTE: You can use the "Rename" command on the "Refactor" menu to change the interface name "IService1" in both code and config file together.
+    [ServiceContract]
+    public interface ISmartGroceryApis
+    {
+        /* Methods related to Users table */
+        [OperationContract]
+        [WebInvoke(UriTemplate = "user/Register", Method = "POST")]
+        bool Register(User user);
+
+        [OperationContract]
+        [WebInvoke(UriTemplate = "user/GetKey", Method = "POST")]
+        bool GetKey(User user);
+
+        [OperationContract]
+        [WebInvoke(UriTemplate = "user/UpdatePassword", Method = "POST", BodyStyle=WebMessageBodyStyle.WrappedRequest)]
+        bool UpdatePassword(User user, string newPassword, string sessionKey);
+
+
+        [OperationContract]
+        [WebInvoke(UriTemplate = "user/Delete", Method = "POST")]
+        bool Delete(User user, string sessionKey);
+
+        /* Methods related to template table */
+        [OperationContract]
+        [WebInvoke(UriTemplate = "templates?query={query}&session={sessionKey}", Method = "GET", BodyStyle = WebMessageBodyStyle.WrappedRequest)]
+        List<Template> GetTemplates(string query, string sessionKey);
+
+        [OperationContract]
+        [WebInvoke(UriTemplate = "templates/{templateId}?session={sessionKey}", Method = "GET", BodyStyle = WebMessageBodyStyle.WrappedRequest)]
+        List<TemplateItem> GetTemplate(string templateId, string sessionKey);
+
+
+        /* Methods related to list table */
+        [OperationContract]
+        [WebInvoke(UriTemplate = "list/", Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest)]
+        bool GetLists(List<List> list);
+
+        [OperationContract]
+        [WebInvoke(UriTemplate = "list/add", Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest)]
+        bool AddList(List list, string sessionKey);
+
+        [OperationContract]
+        [WebInvoke(UriTemplate = "list/delete", Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest)]
+        bool DeleteList(long listId, string sessionKey);
+
+        [OperationContract]
+        [WebInvoke(UriTemplate = "list/duplicate", Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest)]
+        bool DuplicateList(long listId , string sessionKey);
+
+        [OperationContract]
+        [WebInvoke(UriTemplate = "list/rename", Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest)]
+        bool RenameList(long listId, string newName, string sessionKey);
+
+        /* Methods related to listitem table */
+
+
+    }
+}
