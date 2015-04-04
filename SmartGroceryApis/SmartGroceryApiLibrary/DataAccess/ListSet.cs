@@ -10,54 +10,53 @@ namespace SmartGroceryApiLibrary.DataAccess
 {
     public class ListSet
     {
-        public bool AddList(List list)
+        public long AddList(List list)
         {
             ConnectionManager connection = new ConnectionManager();
             connection.Open();
 
-            SqlCommand cmd = new SqlCommand("insert into Templates(NAME,COLOR) values(@name,@color)", connection.con);
+            SqlCommand cmd = new SqlCommand("insert into LISTS(NAME,COLOR,LASTMODIFIED,USERNAME) values(@name,@color,@lastmodified,@username)", connection.con);
             cmd.Parameters.Add(new SqlParameter("@name", list.Name));
             cmd.Parameters.Add(new SqlParameter("@color", list.Color));
+            cmd.Parameters.Add(new SqlParameter("@lastmodified", DateTime.Now.ToString(Constants.DATEFORMAT)));
+            cmd.Parameters.Add(new SqlParameter("@username", list.Username));
 
-            bool ret = cmd.ExecuteNonQuery() > 0;
+            long ret = -1;
 
-            connection.Close();
-
-            return ret;
-        }
-
-        public Template GetTemplate(int id)
-        {
-            ConnectionManager connection = new ConnectionManager();
-            connection.Open();
-
-            Template template = null;
-
-            SqlCommand cmd = new SqlCommand("Select * from Templates where Id=@id", connection.con);
-            cmd.Parameters.Add(new SqlParameter("@id", id));
-            SqlDataReader sdr = cmd.ExecuteReader();
-
-            if (sdr.HasRows)
+            if (cmd.ExecuteNonQuery() > 0)
             {
-                template = new Template();
-                template.Id = id;
-                template.Name = sdr["NAME"].ToString();
-                template.Color = sdr["COLOR"].ToString();
+                cmd.CommandText = "Select @@Identity";
+                ret = long.Parse(cmd.ExecuteScalar().ToString());
             }
 
-            sdr.Close();
             connection.Close();
 
-            return template;
+            return ret;
         }
 
-        public bool DeleteTemplate(int templateId)
+        public string GetLastModified(long listId)
         {
             ConnectionManager connection = new ConnectionManager();
             connection.Open();
 
-            SqlCommand cmd = new SqlCommand("delete from Templates where ID=@id", connection.con);
-            cmd.Parameters.Add(new SqlParameter("@id", templateId));
+            SqlCommand cmd = new SqlCommand("SELECT LASTMODIFIED FROM LISTS where ID=@id", connection.con);
+            cmd.Parameters.Add(new SqlParameter("@id", listId));
+
+            string ret = cmd.ExecuteScalar().ToString();
+
+            connection.Close();
+
+            return ret;
+        }
+
+        public bool ModifyNow(long listId)
+        {
+            ConnectionManager connection = new ConnectionManager();
+            connection.Open();
+
+            SqlCommand cmd = new SqlCommand("UPDATE LISTS SET LASTMODIFIED=@lastmodified where ID=@id", connection.con);
+            cmd.Parameters.Add(new SqlParameter("@id", listId));
+            cmd.Parameters.Add(new SqlParameter("@lastmodified", DateTime.Now.ToString(Constants.DATEFORMAT)));
 
             bool ret = cmd.ExecuteNonQuery() > 0;
 
@@ -66,33 +65,172 @@ namespace SmartGroceryApiLibrary.DataAccess
             return ret;
         }
 
-        public List<Template> GetTemplateList(string query)
+        public List DuplicateList(int id, string name, string username)
         {
             ConnectionManager connection = new ConnectionManager();
             connection.Open();
 
-            List<Template> list = new List<Template>();
+            List list = null;
 
-            SqlCommand cmd = new SqlCommand("Select * from Templates where Name LIKE '%" + query + "%'", connection.con);
+            List originalList = GetList(id);
+            if (originalList != null)
+            {
+                list = new List()
+                {
+                    Name = name,
+                    Color = originalList.Color,
+                    Username =  username
+                };
+
+                //adding list to db
+                list.Id = AddList(list);
+
+                //getting list of items in original list
+                ListItemSet listItemSet = new ListItemSet();
+                List<ListItem> items = listItemSet.GetListItems(originalList.Id);
+
+                //adding items in original list to duplicate list
+                foreach (ListItem item in items)
+                {
+                    //updating id to new lists id
+                    item.ListId = list.Id;
+                    item.Reminder = null;
+                    //adding item to db
+                    listItemSet.AddListItem(item);
+                }
+            }
+
+            connection.Close();
+
+            return list;
+        }
+
+
+        public bool ShareList(int listId, string withUsername)
+        {
+            ConnectionManager connection = new ConnectionManager();
+            connection.Open();
+
+            SqlCommand cmd = new SqlCommand("UPDATE Lists SET USERNAME=USERNAME+@newUser where ID=@id", connection.con);
+            cmd.Parameters.Add(new SqlParameter("@id", listId));
+            cmd.Parameters.Add(new SqlParameter("@newUser", ","+withUsername));
+
+            bool ret = cmd.ExecuteNonQuery() > 0;
+
+            connection.Close();
+
+            return ret;
+        }
+
+        public string GetSharingDetails(long listId)
+        {
+            ConnectionManager connection = new ConnectionManager();
+            connection.Open();
+
+            SqlCommand cmd = new SqlCommand("SELECT USERNAME FROM Lists where ID=@id", connection.con);
+            cmd.Parameters.Add(new SqlParameter("@id", listId));
+
+            string sharingDetails = cmd.ExecuteScalar().ToString();
+
+            connection.Close();
+
+            return sharingDetails;
+        }
+
+        public bool UnShareList(int listId, string withUsername)
+        {
+            ConnectionManager connection = new ConnectionManager();
+            connection.Open();
+
+            string sharingDetails = GetSharingDetails(listId);
+
+            sharingDetails = sharingDetails.Replace(","+withUsername,"");
+
+            SqlCommand cmd = new SqlCommand("UPDATE LISTS SET USERNAME=@username WHERE ID=@id", connection.con);
+            cmd.Parameters.Add(new SqlParameter("@id", listId));
+            cmd.Parameters.Add(new SqlParameter("@username", sharingDetails));
+
+            bool ret = cmd.ExecuteNonQuery() > 0;
+
+            connection.Close();
+
+            return ret;
+        }
+
+        public bool DeleteList(int listId)
+        {
+            ConnectionManager connection = new ConnectionManager();
+            connection.Open();
+
+            SqlCommand cmd = new SqlCommand("delete from Lists where ID=@id", connection.con);
+            cmd.Parameters.Add(new SqlParameter("@id", listId));
+
+            bool ret = cmd.ExecuteNonQuery() > 0;
+
+            connection.Close();
+
+            return ret;
+        }
+
+        public List GetList(long listId)
+        {
+            ConnectionManager connection = new ConnectionManager();
+            connection.Open();
+
+            List list = null;
+
+            SqlCommand cmd = new SqlCommand("Select * from Lists where ID=@id", connection.con);
+            cmd.Parameters.Add(new SqlParameter("@id", listId));
             SqlDataReader sdr = cmd.ExecuteReader();
 
             if (sdr.HasRows)
             {
-                while (sdr.Read())
-                {
-                    Template template = new Template();
-                    template.Id = long.Parse(sdr["Id"].ToString());
-                    template.Name = sdr["Name"].ToString();
-                    template.Color = sdr["Color"].ToString();
+                sdr.Read();
+                
+                    list = new List();
+                    list.Id = long.Parse(sdr["Id"].ToString());
+                    list.Name = sdr["Name"].ToString();
+                    list.Color = sdr["Color"].ToString();
+                    list.LastModified = DateTime.Parse(sdr["LASTMODIFIED"].ToString()).ToString(Constants.DATEFORMAT);
+                    list.Username = sdr["USERNAME"].ToString();
 
-                    list.Add(template);
-                }
             }
 
             sdr.Close();
             connection.Close();
 
             return list;
+        }
+
+        public List<List> GetLists(string username)
+        {
+            ConnectionManager connection = new ConnectionManager();
+            connection.Open();
+
+            List<List> lists = new List<List>();
+
+            SqlCommand cmd = new SqlCommand("Select * from Lists where Username LIKE '%" + username + "%'", connection.con);
+            SqlDataReader sdr = cmd.ExecuteReader();
+
+            if (sdr.HasRows)
+            {
+                while (sdr.Read())
+                {
+                    List list = new List();
+                    list.Id = long.Parse(sdr["Id"].ToString());
+                    list.Name = sdr["Name"].ToString();
+                    list.Color = sdr["Color"].ToString();
+                    list.LastModified = DateTime.Parse(sdr["LASTMODIFIED"].ToString()).ToString(Constants.DATEFORMAT);
+                    list.Username = username;
+
+                    lists.Add(list);
+                }
+            }
+
+            sdr.Close();
+            connection.Close();
+
+            return lists;
         }
     }
 }

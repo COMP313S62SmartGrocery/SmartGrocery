@@ -47,6 +47,22 @@ namespace SmartGroceryApiLibrary.DataAccess
             return ret;
         }
 
+        public bool SetNotificationRead(long id)
+        {
+            ConnectionManager connection = new ConnectionManager();
+            connection.Open();
+
+
+            SqlCommand cmd = new SqlCommand("update Notifications set IsRead=1 where Id=@id", connection.con);
+            cmd.Parameters.Add(new SqlParameter("@id", id));
+
+            bool ret = cmd.ExecuteNonQuery() > 0;
+
+            connection.Close();
+
+            return ret;
+        }
+
         public bool DeleteNotification(int notificationId)
         {
             ConnectionManager connection = new ConnectionManager();
@@ -85,6 +101,8 @@ namespace SmartGroceryApiLibrary.DataAccess
                     notification.Subject = sdr["SUBJECT"].ToString();
                     notification.Text = sdr["TEXT"].ToString();
                     notification.Username = username;
+
+                    notifications.Add(notification);
                 }
             }
 
