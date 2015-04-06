@@ -37,12 +37,16 @@ namespace SmartGroceryApiLibrary
 
         /* Methods related to template table */
         [OperationContract]
-        [WebInvoke(UriTemplate = "templates?query={query}&session={sessionKey}", Method = "GET", BodyStyle = WebMessageBodyStyle.WrappedRequest)]
-        List<Template> GetTemplates(string query, string sessionKey);
+        [WebInvoke(UriTemplate = "templates?query={query}", Method = "GET")]
+        List<Template> GetTemplates(string query);
 
         [OperationContract]
-        [WebInvoke(UriTemplate = "templates/{templateId}?session={sessionKey}", Method = "GET", BodyStyle = WebMessageBodyStyle.WrappedRequest)]
-        List<TemplateItem> GetTemplate(string templateId, string sessionKey);
+        [WebInvoke(UriTemplate = "templates/details/{templateId}", Method = "GET")]
+        Template GetTemplate(string templateId);
+
+        [OperationContract]
+        [WebInvoke(UriTemplate = "templates/{templateId}", Method = "GET")]
+        List<TemplateItem> GetTemplateItems(string templateId);
 
         /* Methods related to list table 
         [OperationContract]

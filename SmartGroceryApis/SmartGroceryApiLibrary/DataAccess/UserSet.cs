@@ -143,13 +143,7 @@ namespace SmartGroceryApiLibrary.DataAccess
                 cmd.Parameters.Add(new SqlParameter("@username", username));
                 cmd.Parameters.Add(new SqlParameter("@password", password));
 
-                object val = cmd.ExecuteScalar();
-                string ret = null;
-
-                if(val!=null)
-                {
-                    ret = val.ToString();
-                }
+                string ret = cmd.ExecuteScalar().ToString();
 
                 connection.Close();
 

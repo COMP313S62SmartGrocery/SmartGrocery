@@ -58,14 +58,20 @@ namespace SmartGroceryApiLibrary
             return false;
         }
 
-        public List<Template> GetTemplates(string query, string sessionKey)
+
+        public List<Template> GetTemplates(string query)
         {
-            throw new NotImplementedException();
+            return TemplateSet.GetTemplateList(query);
         }
 
-        public List<TemplateItem> GetTemplate(string templateId, string sessionKey)
+        public Template GetTemplate(string templateId)
         {
-            throw new NotImplementedException();
+            return TemplateSet.GetTemplate(int.Parse(templateId));
+        }
+
+        public List<TemplateItem> GetTemplateItems(string templateId)
+        {
+            return TemplateItemSet.GetTemplateItems(int.Parse(templateId));
         }
     }
 }

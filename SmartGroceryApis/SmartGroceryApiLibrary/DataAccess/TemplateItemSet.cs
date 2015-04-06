@@ -10,7 +10,7 @@ namespace SmartGroceryApiLibrary.DataAccess
 {
     public class TemplateItemSet
     {
-        public bool AddTemplateItem(TemplateItem templateItem)
+        public static bool AddTemplateItem(TemplateItem templateItem)
         {
             ConnectionManager connection = new ConnectionManager();
             connection.Open();
@@ -28,7 +28,7 @@ namespace SmartGroceryApiLibrary.DataAccess
             return ret;
         }
 
-        public TemplateItem GetTemplateItem(long id)
+        public static TemplateItem GetTemplateItem(long id)
         {
             ConnectionManager connection = new ConnectionManager();
             connection.Open();
@@ -55,7 +55,7 @@ namespace SmartGroceryApiLibrary.DataAccess
             return templateItem;
         }
 
-        public bool DeleteTemplateItem(long templateItemId)
+        public static bool DeleteTemplateItem(long templateItemId)
         {
             ConnectionManager connection = new ConnectionManager();
             connection.Open();
@@ -70,7 +70,7 @@ namespace SmartGroceryApiLibrary.DataAccess
             return ret;
         }
 
-        public List<TemplateItem> GetTemplateItems(int templateId)
+        public static List<TemplateItem> GetTemplateItems(int templateId)
         {
             ConnectionManager connection = new ConnectionManager();
             connection.Open();

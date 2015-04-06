@@ -11,7 +11,7 @@ namespace SmartGroceryApiLibrary.DataAccess
 {
     public class TemplateSet
     {
-        public bool AddTemplate(Template template)
+        public static bool AddTemplate(Template template)
         {
             ConnectionManager connection = new ConnectionManager();
             connection.Open();
@@ -27,7 +27,7 @@ namespace SmartGroceryApiLibrary.DataAccess
             return ret;
         }
 
-        public Template GetTemplate(int id)
+        public static Template GetTemplate(int id)
         {
             ConnectionManager connection = new ConnectionManager();
             connection.Open();
@@ -40,6 +40,8 @@ namespace SmartGroceryApiLibrary.DataAccess
 
             if (sdr.HasRows)
             {
+                sdr.Read();
+
                 template = new Template();
                 template.Id = id;
                 template.Name = sdr["NAME"].ToString();
@@ -52,7 +54,7 @@ namespace SmartGroceryApiLibrary.DataAccess
             return template;
         }
 
-        public bool DeleteTemplate(int templateId)
+        public static bool DeleteTemplate(int templateId)
         {
             ConnectionManager connection = new ConnectionManager();
             connection.Open();
@@ -67,7 +69,7 @@ namespace SmartGroceryApiLibrary.DataAccess
             return ret;
         }
 
-        public List<Template> GetTemplateList(string query)
+        public static List<Template> GetTemplateList(string query)
         {
             ConnectionManager connection = new ConnectionManager();
             connection.Open();
