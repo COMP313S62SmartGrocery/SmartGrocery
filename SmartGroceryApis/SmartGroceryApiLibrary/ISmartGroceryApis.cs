@@ -70,6 +70,20 @@ namespace SmartGroceryApiLibrary
         [WebInvoke(UriTemplate = "notifications/delete", Method = "POST", BodyStyle=WebMessageBodyStyle.WrappedRequest)]
         bool DeleteNotification(User user, int notificationId);
 
+        /* Methods related to ItemHistory table */
+
+        [OperationContract]
+        [WebInvoke(UriTemplate = "history/getItems", Method = "POST")]
+        List<string> GetItems(User user);
+
+        [OperationContract]
+        [WebInvoke(UriTemplate = "history/get", Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest)]
+        List<ItemHistory> GetItemHistory(User user, string itemName);
+
+        [OperationContract]
+        [WebInvoke(UriTemplate = "history/clear", Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest)]
+        bool ClearItemHistory(User user, string itemName);
+
         /* Methods related to list table 
         [OperationContract]
         [WebInvoke(UriTemplate = "list/", Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest)]

@@ -10,7 +10,7 @@ namespace SmartGroceryApiLibrary.DataAccess
 {
     public class ItemHistorySet
     {
-        public bool AddItemHistory(ItemHistory itemHistory)
+        public static bool AddItemHistory(ItemHistory itemHistory)
         {
             ConnectionManager connection = new ConnectionManager();
             connection.Open();
@@ -30,7 +30,7 @@ namespace SmartGroceryApiLibrary.DataAccess
             return ret;
         }
 
-        public List<ItemHistory> GetItemHistory(string itemName, string username)
+        public static List<ItemHistory> GetItemHistory(string itemName, string username)
         {
             ConnectionManager connection = new ConnectionManager();
             connection.Open();
@@ -65,7 +65,7 @@ namespace SmartGroceryApiLibrary.DataAccess
             return history;
         }
 
-        public bool ClearHistory(string itemName, string username)
+        public static bool ClearHistory(string itemName, string username)
         {
             ConnectionManager connection = new ConnectionManager();
             connection.Open();
@@ -91,7 +91,7 @@ namespace SmartGroceryApiLibrary.DataAccess
             return ret;
         }
 
-        public List<string> GetItemList(string username)
+        public static List<string> GetItemList(string username)
         {
             ConnectionManager connection = new ConnectionManager();
             connection.Open();

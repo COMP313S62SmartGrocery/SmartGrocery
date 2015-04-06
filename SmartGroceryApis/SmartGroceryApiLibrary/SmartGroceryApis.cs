@@ -123,11 +123,41 @@ namespace SmartGroceryApiLibrary
         {
             if (IsValidUser(user))
             {
-                return NotificationSet.DeleteNotification(new Notification(){ Id = notificationId, Username = user.Username});
+                return NotificationSet.DeleteNotification(new Notification() { Id = notificationId, Username = user.Username });
             }
 
             return false;
         }
+        #endregion
+
+        #region ItemHistory
+        public List<string> GetItems(User user)
+        {
+            if (IsValidUser(user))
+            {
+                return ItemHistorySet.GetItemList(user.Username);
+            }
+            return null;
+        }
+
+        public List<ItemHistory> GetItemHistory(User user, string itemName)
+        {
+            if (IsValidUser(user))
+            {
+                return ItemHistorySet.GetItemHistory(itemName, user.Username);
+            }
+            return null;
+        }
+
+        public bool ClearItemHistory(User user, string itemName)
+        {
+            if (IsValidUser(user))
+            {
+                return ItemHistorySet.ClearHistory(itemName, user.Username);
+            }
+            return false;
+        }
+
         #endregion
     }
 }
