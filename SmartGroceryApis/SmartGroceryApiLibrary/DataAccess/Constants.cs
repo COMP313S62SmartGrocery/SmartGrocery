@@ -8,6 +8,6 @@ namespace SmartGroceryApiLibrary.DataAccess
 {
     public static class Constants
     {
-        public static string DATEFORMAT = "dd-MMM-yyyy HH:mm";
+        public static string DATEFORMAT = "dd-MMM-yyyy HH:mm:ss";
     }
 }

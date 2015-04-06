@@ -10,8 +10,10 @@ namespace SmartGroceryApiLibrary.DataAccess
 {
     class UserSet
     {
-        public bool AddUser(string username, string password)
+        public static string AddUser(string username, string password)
         {
+            string ret = null;
+
             ConnectionManager connection = new ConnectionManager();
 
             try{
@@ -25,11 +27,12 @@ namespace SmartGroceryApiLibrary.DataAccess
                 cmd.Parameters.Add(new SqlParameter("@password",password));
                 cmd.Parameters.Add(new SqlParameter("@authkey", uuid));
 
-                bool ret = cmd.ExecuteNonQuery()>0;
+                if (cmd.ExecuteNonQuery() > 0)
+                {
+                    ret = uuid;
+                }
 
                 connection.Close();
-
-                return ret;
             }
             catch(Exception ex){
                 try{
@@ -37,10 +40,10 @@ namespace SmartGroceryApiLibrary.DataAccess
                 }finally{
                 }
             }
-            return false;
+            return ret;
         }
 
-        public bool RemoveUser(string username,string password)
+        public static bool RemoveUser(string username, string password)
         {
             ConnectionManager connection = new ConnectionManager();
 
@@ -66,7 +69,7 @@ namespace SmartGroceryApiLibrary.DataAccess
             return false;
         }
 
-        public bool UpdatePassword(string username, string password, string newPassword)
+        public static bool UpdatePassword(string username, string password, string newPassword)
         {
             ConnectionManager connection = new ConnectionManager();
 
@@ -97,7 +100,8 @@ namespace SmartGroceryApiLibrary.DataAccess
             }
             return false;
         }
-        public bool IsExists(string username)
+
+        public static bool IsExists(string username)
         {
             ConnectionManager connection = new ConnectionManager();
 
@@ -127,7 +131,7 @@ namespace SmartGroceryApiLibrary.DataAccess
             return false;
         }
 
-        public string Authenticate(string username, string password)
+        public static string GetAuthKey(string username, string password)
         {
             ConnectionManager connection = new ConnectionManager();
 
@@ -139,7 +143,13 @@ namespace SmartGroceryApiLibrary.DataAccess
                 cmd.Parameters.Add(new SqlParameter("@username", username));
                 cmd.Parameters.Add(new SqlParameter("@password", password));
 
-                string ret = cmd.ExecuteScalar().ToString();
+                object val = cmd.ExecuteScalar();
+                string ret = null;
+
+                if(val!=null)
+                {
+                    ret = val.ToString();
+                }
 
                 connection.Close();
 
@@ -158,7 +168,12 @@ namespace SmartGroceryApiLibrary.DataAccess
             return null;
         }
 
-        public string GenerateAuthKey(string username, string password)
+        public static string Authenticate(string authKey)
+        {
+            return GenerateSessionKey(authKey);
+        }
+
+/*        public static string GenerateAuthKey(string username, string password)
         {
             ConnectionManager connection = new ConnectionManager();
 
@@ -194,9 +209,9 @@ namespace SmartGroceryApiLibrary.DataAccess
                 }
             }
             return null;
-        }
+        }*/
 
-        public string GenerateSessionKey(string authenticationKey)
+        public static string GenerateSessionKey(string authenticationKey)
         {
             ConnectionManager connection = new ConnectionManager();
 
@@ -206,7 +221,7 @@ namespace SmartGroceryApiLibrary.DataAccess
                 string uuid = Guid.NewGuid().ToString();
                 DateTime expiry = DateTime.Now.AddHours(2);
 
-                SqlCommand cmd = new SqlCommand("UPDATE USERS SET SESS_KEY=@sesskey and SESS_EXPIRY=@expiry where AUTH_KEY=@authkey", connection.con);
+                SqlCommand cmd = new SqlCommand("UPDATE USERS SET SESS_KEY=@sesskey, SESS_EXPIRY=@expiry where AUTH_KEY=@authkey", connection.con);
                 cmd.Parameters.Add(new SqlParameter("@authkey", authenticationKey));
                 cmd.Parameters.Add(new SqlParameter("@sesskey", uuid));
                 cmd.Parameters.Add(new SqlParameter("@expiry", expiry.ToString(Constants.DATEFORMAT)));
@@ -216,6 +231,51 @@ namespace SmartGroceryApiLibrary.DataAccess
                 if (cmd.ExecuteNonQuery() > 0)
                 {
                     ret = uuid;
+                }
+
+                connection.Close();
+
+                return ret;
+            }
+            catch (Exception ex)
+            {
+                try
+                {
+                    connection.Close();
+                }
+                finally
+                {
+                }
+            }
+            return null;
+        }
+
+        public static string GetUsername(string sessionkey)
+        {
+            ConnectionManager connection = new ConnectionManager();
+
+            try
+            {
+                connection.Open();
+
+                SqlCommand cmd = new SqlCommand("SELECT USERNAME, SESS_EXPIRY FROM USERS WHERE SESS_KEY=@sesskey ", connection.con);
+                cmd.Parameters.Add(new SqlParameter("@sesskey", sessionkey));
+
+                string ret = null;
+
+                SqlDataReader sdr = cmd.ExecuteReader();
+
+                if (sdr.HasRows)
+                {
+                    sdr.Read(); //reading the row
+                    
+                    //comparing epiry
+                    DateTime expiry = DateTime.Parse(sdr["SESS_EXPIRY"].ToString());
+
+                    if (DateTime.Now.Subtract(expiry).Seconds < 0)
+                    {
+                        ret = sdr["USERNAME"].ToString();
+                    }
                 }
 
                 connection.Close();

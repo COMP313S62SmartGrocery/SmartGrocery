@@ -11,94 +11,59 @@ namespace SmartGroceryApiLibrary
 {
     public class SmartGroceryApis : ISmartGroceryApis
     {
-        public bool Register(string username, string password)
+        public string Register(User user)
         {
-            throw new NotImplementedException();
+            if (!UserSet.IsExists(user.Username))
+            {
+                return UserSet.AddUser(user.Username, user.Password);
+            }
+
+            return null;
         }
 
-        public bool GetKey(string username, string password)
+        public string Authenticate(string authKey)
         {
-            throw new NotImplementedException();
+            return UserSet.Authenticate(authKey);
         }
 
-        public bool UpdatePassword(string username, string password, string newPassword)
+        public string GetAuthKey(User user)
         {
-            throw new NotImplementedException();
-        }
-
-        public bool Delete(string username, string password, string newPassword)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool GetLists(List<List> list)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool AddList(List list)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool DeleteList(long listId)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        public List<Template> GetTemplates(string query, string sessionKey)
-        {
-            TemplateSet set = new TemplateSet();
-            return set.GetTemplateList(query);
-        }
-
-        public List<TemplateItem> GetTemplate(string templateId, string sessionKey)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool AddList(List list, string sessionKey)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool DeleteList(long listId, string sessionKey)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool DuplicateList(long listId, string sessionKey)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool RenameList(long listId, string newName, string sessionKey)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool RenameList(ListItem listItem, string sessionKey)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Register(User user)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool GetKey(User user)
-        {
-            throw new NotImplementedException();
+            return UserSet.GetAuthKey(user.Username, user.Password);
         }
 
         public bool UpdatePassword(User user, string newPassword)
         {
-            throw new NotImplementedException();
+            return UserSet.UpdatePassword(user.Username, user.Password, newPassword);
         }
 
         public bool Delete(User user)
+        {
+            if (IsValidUser(user))
+            {
+                return UserSet.RemoveUser(user.Username, user.Password);
+            }
+
+            return false;
+
+        }
+
+        private bool IsValidUser(User user)
+        {
+            string username = UserSet.GetUsername(user.SESS_KEY);
+            if (!string.IsNullOrEmpty(username) && username.Equals(user.Username, StringComparison.CurrentCulture))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public List<Template> GetTemplates(string query, string sessionKey)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<TemplateItem> GetTemplate(string templateId, string sessionKey)
         {
             throw new NotImplementedException();
         }

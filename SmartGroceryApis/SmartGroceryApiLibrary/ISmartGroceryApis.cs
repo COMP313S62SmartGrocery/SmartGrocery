@@ -16,20 +16,24 @@ namespace SmartGroceryApiLibrary
         /* Methods related to Users table */
         [OperationContract]
         [WebInvoke(UriTemplate = "user/Register", Method = "POST")]
-        bool Register(User user);
+        string Register(User user);
 
         [OperationContract]
-        [WebInvoke(UriTemplate = "user/GetKey", Method = "POST")]
-        bool GetKey(User user);
+        [WebInvoke(UriTemplate = "user/Authenticate", Method = "POST")]
+        string Authenticate(string authKey);
+
+        [OperationContract]
+        [WebInvoke(UriTemplate = "user/GetAuthKey", Method = "POST")]
+        string GetAuthKey(User user);
 
         [OperationContract]
         [WebInvoke(UriTemplate = "user/UpdatePassword", Method = "POST", BodyStyle=WebMessageBodyStyle.WrappedRequest)]
-        bool UpdatePassword(User user, string newPassword, string sessionKey);
+        bool UpdatePassword(User user, string newPassword);
 
 
         [OperationContract]
         [WebInvoke(UriTemplate = "user/Delete", Method = "POST")]
-        bool Delete(User user, string sessionKey);
+        bool Delete(User user);
 
         /* Methods related to template table */
         [OperationContract]
@@ -40,8 +44,7 @@ namespace SmartGroceryApiLibrary
         [WebInvoke(UriTemplate = "templates/{templateId}?session={sessionKey}", Method = "GET", BodyStyle = WebMessageBodyStyle.WrappedRequest)]
         List<TemplateItem> GetTemplate(string templateId, string sessionKey);
 
-
-        /* Methods related to list table */
+        /* Methods related to list table 
         [OperationContract]
         [WebInvoke(UriTemplate = "list/", Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest)]
         bool GetLists(List<List> list);
@@ -63,7 +66,5 @@ namespace SmartGroceryApiLibrary
         bool RenameList(long listId, string newName, string sessionKey);
 
         /* Methods related to listitem table */
-
-
     }
 }
