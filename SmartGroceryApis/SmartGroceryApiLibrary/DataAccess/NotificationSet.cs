@@ -10,7 +10,7 @@ namespace SmartGroceryApiLibrary.DataAccess
 {
     public class NotificationSet
     {
-        public bool AddNotification(Notification notification)
+        public static bool AddNotification(Notification notification)
         {
             ConnectionManager connection = new ConnectionManager();
             connection.Open();
@@ -30,15 +30,16 @@ namespace SmartGroceryApiLibrary.DataAccess
             return ret;
         }
 
-        public bool UpdateNotification(long id, string text)
+        public static bool UpdateNotification(string username, long id, string text)
         {
             ConnectionManager connection = new ConnectionManager();
             connection.Open();
 
             
-            SqlCommand cmd = new SqlCommand("update Notifications set Text=@text where Id=@id", connection.con);
+            SqlCommand cmd = new SqlCommand("update Notifications set Text=@text where Id=@id AND USERNAME=@username", connection.con);
             cmd.Parameters.Add(new SqlParameter("@text", text));
             cmd.Parameters.Add(new SqlParameter("@id", id));
+            cmd.Parameters.Add(new SqlParameter("@username", username));
 
             bool ret = cmd.ExecuteNonQuery() > 0;
 
@@ -47,14 +48,15 @@ namespace SmartGroceryApiLibrary.DataAccess
             return ret;
         }
 
-        public bool SetNotificationRead(long id)
+        public static bool SetNotificationRead(Notification notification)
         {
             ConnectionManager connection = new ConnectionManager();
             connection.Open();
 
 
-            SqlCommand cmd = new SqlCommand("update Notifications set IsRead=1 where Id=@id", connection.con);
-            cmd.Parameters.Add(new SqlParameter("@id", id));
+            SqlCommand cmd = new SqlCommand("update Notifications set IsRead=1 where Id=@id AND USERNAME=@username", connection.con);
+            cmd.Parameters.Add(new SqlParameter("@id", notification.Id));
+            cmd.Parameters.Add(new SqlParameter("@username", notification.Username));
 
             bool ret = cmd.ExecuteNonQuery() > 0;
 
@@ -63,13 +65,14 @@ namespace SmartGroceryApiLibrary.DataAccess
             return ret;
         }
 
-        public bool DeleteNotification(int notificationId)
+        public static bool DeleteNotification(Notification notification)
         {
             ConnectionManager connection = new ConnectionManager();
             connection.Open();
 
-            SqlCommand cmd = new SqlCommand("delete from Notifications where ID=@id", connection.con);
-            cmd.Parameters.Add(new SqlParameter("@id", notificationId));
+            SqlCommand cmd = new SqlCommand("delete from Notifications where ID=@id AND USERNAME=@username", connection.con);
+            cmd.Parameters.Add(new SqlParameter("@id", notification.Id));
+            cmd.Parameters.Add(new SqlParameter("@username", notification.Username));
 
             bool ret = cmd.ExecuteNonQuery() > 0;
 
@@ -78,7 +81,7 @@ namespace SmartGroceryApiLibrary.DataAccess
             return ret;
         }
 
-        public List<Notification> GetNotifications(string username)
+        public static List<Notification> GetNotifications(string username)
         {
             ConnectionManager connection = new ConnectionManager();
             connection.Open();
@@ -112,7 +115,7 @@ namespace SmartGroceryApiLibrary.DataAccess
             return notifications;
         }
 
-        public int CountNotifications(string username)
+        public static int CountNotifications(string username)
         {
             ConnectionManager connection = new ConnectionManager();
             connection.Open();

@@ -48,6 +48,28 @@ namespace SmartGroceryApiLibrary
         [WebInvoke(UriTemplate = "templates/{templateId}", Method = "GET")]
         List<TemplateItem> GetTemplateItems(string templateId);
 
+        /* Methods related to Notification table */
+
+        [OperationContract]
+        [WebInvoke(UriTemplate = "notifications/get", Method = "POST")]
+        List<Notification> GetNotifications(User user);
+
+        [OperationContract]
+        [WebInvoke(UriTemplate = "notifications/getCount", Method = "POST")]
+        string GetNotificationsCount(User user);
+
+        [OperationContract]
+        [WebInvoke(UriTemplate = "notifications/setRead", Method = "POST", BodyStyle=WebMessageBodyStyle.WrappedRequest)]
+        bool SetNotificationAsRead(User user, int notificationId);
+
+        [OperationContract]
+        [WebInvoke(UriTemplate = "notifications/update", Method = "POST", BodyStyle=WebMessageBodyStyle.WrappedRequest)]
+        bool UpdateNotification(User user, int notificationId, string text);
+
+        [OperationContract]
+        [WebInvoke(UriTemplate = "notifications/delete", Method = "POST", BodyStyle=WebMessageBodyStyle.WrappedRequest)]
+        bool DeleteNotification(User user, int notificationId);
+
         /* Methods related to list table 
         [OperationContract]
         [WebInvoke(UriTemplate = "list/", Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest)]

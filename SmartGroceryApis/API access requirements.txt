@@ -3,4 +3,6 @@ Set Content type to "Appllication/json"
 
 Pass data in JSON format
 
-"5995d4fa-d26a-4b60-8035-2365c57dd0a3"
+AUTH_KEY : "29fc2099-202a-4769-8ae2-2198f4fdcc92"
+
+SESS_KEY : "a96f375a-5ff0-4fb4-93a0-0816784e88f5"

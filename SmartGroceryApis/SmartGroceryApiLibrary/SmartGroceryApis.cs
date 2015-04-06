@@ -11,6 +11,7 @@ namespace SmartGroceryApiLibrary
 {
     public class SmartGroceryApis : ISmartGroceryApis
     {
+        #region user
         public string Register(User user)
         {
             if (!UserSet.IsExists(user.Username))
@@ -57,7 +58,9 @@ namespace SmartGroceryApiLibrary
 
             return false;
         }
+        #endregion
 
+        #region template
 
         public List<Template> GetTemplates(string query)
         {
@@ -73,5 +76,58 @@ namespace SmartGroceryApiLibrary
         {
             return TemplateItemSet.GetTemplateItems(int.Parse(templateId));
         }
+        #endregion
+
+        #region notification
+
+        public List<Notification> GetNotifications(User user)
+        {
+            if (IsValidUser(user))
+            {
+                return NotificationSet.GetNotifications(user.Username);
+            }
+            return null;
+        }
+
+        public string GetNotificationsCount(User user)
+        {
+            if (IsValidUser(user))
+            {
+                return NotificationSet.CountNotifications(user.Username).ToString();
+            }
+
+            return "-1";
+        }
+
+        public bool SetNotificationAsRead(User user, int notificationId)
+        {
+            if (IsValidUser(user))
+            {
+                return NotificationSet.SetNotificationRead(new Notification() { Id = notificationId, Username = user.Username });
+            }
+
+            return false;
+        }
+
+        public bool UpdateNotification(User user, int notificationId, string text)
+        {
+            if (IsValidUser(user))
+            {
+                return NotificationSet.UpdateNotification(user.Username, notificationId, text);
+            }
+
+            return false;
+        }
+
+        public bool DeleteNotification(User user, int notificationId)
+        {
+            if (IsValidUser(user))
+            {
+                return NotificationSet.DeleteNotification(new Notification(){ Id = notificationId, Username = user.Username});
+            }
+
+            return false;
+        }
+        #endregion
     }
 }
