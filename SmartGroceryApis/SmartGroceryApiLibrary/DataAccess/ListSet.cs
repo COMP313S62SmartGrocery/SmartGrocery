@@ -10,7 +10,7 @@ namespace SmartGroceryApiLibrary.DataAccess
 {
     public class ListSet
     {
-        public long AddList(List list)
+        public static long AddList(List list)
         {
             ConnectionManager connection = new ConnectionManager();
             connection.Open();
@@ -34,7 +34,7 @@ namespace SmartGroceryApiLibrary.DataAccess
             return ret;
         }
 
-        public string GetLastModified(long listId)
+        public static string GetLastModified(long listId)
         {
             ConnectionManager connection = new ConnectionManager();
             connection.Open();
@@ -49,14 +49,14 @@ namespace SmartGroceryApiLibrary.DataAccess
             return ret;
         }
 
-        public bool ModifyNow(long listId)
+        public static bool ModifyNow(long listId, string time)
         {
             ConnectionManager connection = new ConnectionManager();
             connection.Open();
 
             SqlCommand cmd = new SqlCommand("UPDATE LISTS SET LASTMODIFIED=@lastmodified where ID=@id", connection.con);
             cmd.Parameters.Add(new SqlParameter("@id", listId));
-            cmd.Parameters.Add(new SqlParameter("@lastmodified", DateTime.Now.ToString(Constants.DATEFORMAT)));
+            cmd.Parameters.Add(new SqlParameter("@lastmodified", time));
 
             bool ret = cmd.ExecuteNonQuery() > 0;
 
@@ -65,7 +65,7 @@ namespace SmartGroceryApiLibrary.DataAccess
             return ret;
         }
 
-        public List DuplicateList(int id, string name, string username)
+        public static List DuplicateList(int id, string name, string username)
         {
             ConnectionManager connection = new ConnectionManager();
             connection.Open();
@@ -86,8 +86,7 @@ namespace SmartGroceryApiLibrary.DataAccess
                 list.Id = AddList(list);
 
                 //getting list of items in original list
-                ListItemSet listItemSet = new ListItemSet();
-                List<ListItem> items = listItemSet.GetListItems(originalList.Id);
+                List<ListItem> items = ListItemSet.GetListItems(originalList.Id);
 
                 //adding items in original list to duplicate list
                 foreach (ListItem item in items)
@@ -96,7 +95,7 @@ namespace SmartGroceryApiLibrary.DataAccess
                     item.ListId = list.Id;
                     item.Reminder = null;
                     //adding item to db
-                    listItemSet.AddListItem(item);
+                    ListItemSet.AddListItem(item);
                 }
             }
 
@@ -106,7 +105,7 @@ namespace SmartGroceryApiLibrary.DataAccess
         }
 
 
-        public bool ShareList(int listId, string withUsername)
+        public static bool ShareList(int listId, string withUsername)
         {
             ConnectionManager connection = new ConnectionManager();
             connection.Open();
@@ -122,7 +121,7 @@ namespace SmartGroceryApiLibrary.DataAccess
             return ret;
         }
 
-        public string GetSharingDetails(long listId)
+        public static string GetSharingDetails(long listId)
         {
             ConnectionManager connection = new ConnectionManager();
             connection.Open();
@@ -137,7 +136,7 @@ namespace SmartGroceryApiLibrary.DataAccess
             return sharingDetails;
         }
 
-        public bool UnShareList(int listId, string withUsername)
+        public static bool UnShareList(int listId, string withUsername)
         {
             ConnectionManager connection = new ConnectionManager();
             connection.Open();
@@ -157,7 +156,7 @@ namespace SmartGroceryApiLibrary.DataAccess
             return ret;
         }
 
-        public bool DeleteList(int listId)
+        public static bool DeleteList(int listId)
         {
             ConnectionManager connection = new ConnectionManager();
             connection.Open();
@@ -172,7 +171,7 @@ namespace SmartGroceryApiLibrary.DataAccess
             return ret;
         }
 
-        public List GetList(long listId)
+        public static List GetList(long listId)
         {
             ConnectionManager connection = new ConnectionManager();
             connection.Open();
@@ -202,7 +201,7 @@ namespace SmartGroceryApiLibrary.DataAccess
             return list;
         }
 
-        public List<List> GetLists(string username)
+        public static List<List> GetLists(string username)
         {
             ConnectionManager connection = new ConnectionManager();
             connection.Open();

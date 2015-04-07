@@ -19,7 +19,7 @@ namespace SmartGroceryApiLibrary
                 return UserSet.AddUser(user.Username, user.Password);
             }
 
-            return null;
+            return "-1";
         }
 
         public string Authenticate(string authKey)
@@ -158,6 +158,53 @@ namespace SmartGroceryApiLibrary
             return false;
         }
 
+        #endregion
+
+        #region ListItem
+        public List<ListItem> GetListItems(User user, string listId)
+        {
+            if (IsValidUser(user)) {
+                return ListItemSet.GetListItems(long.Parse(listId));
+            }
+            return null;
+        }
+
+        public int GetListItemsCount(User user, string listId)
+        {
+            if(IsValidUser(user))
+            {
+                return ListItemSet.CountListItems(listId);
+            }
+            return -1;
+        }
+
+        public string AddListItem(User user, ListItem listItem)
+        {
+            if (IsValidUser(user))
+            {
+                ListItemSet.AddListItem(listItem);
+            }
+            return "-1";
+        }
+
+        public bool UpdateListItem(User user, ListItem listItem)
+        {
+            if (IsValidUser(user))
+            {
+                return ListItemSet.UpdateListItem(listItem);
+            }
+            return false;
+        }
+
+        public bool DeleteListItem(User user, string itemId, string time)
+        {
+            if (IsValidUser(user))
+            {
+                return ListItemSet.DeleteListItem(int.Parse(itemId), time);
+            }
+
+            return false;
+        }
         #endregion
     }
 }

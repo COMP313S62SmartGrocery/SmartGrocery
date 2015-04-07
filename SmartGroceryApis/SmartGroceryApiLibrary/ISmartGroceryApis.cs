@@ -104,7 +104,26 @@ namespace SmartGroceryApiLibrary
         [OperationContract]
         [WebInvoke(UriTemplate = "list/rename", Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest)]
         bool RenameList(long listId, string newName, string sessionKey);
-
+        */
         /* Methods related to listitem table */
+        [OperationContract]
+        [WebInvoke(UriTemplate = "listitems/", Method = "POST", BodyStyle=WebMessageBodyStyle.WrappedRequest)]
+        List<ListItem> GetListItems(User user, string listId);
+
+        [OperationContract]
+        [WebInvoke(UriTemplate = "listitems/count", Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest)]
+        int GetListItemsCount(User user, string listId);
+        
+        [OperationContract]
+        [WebInvoke(UriTemplate = "listitems/add", Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest)]
+        string AddListItem(User user, ListItem listItem);
+
+        [OperationContract]
+        [WebInvoke(UriTemplate = "listitems/add", Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest)]
+        bool UpdateListItem(User user, ListItem listItem);
+
+        [OperationContract]
+        [WebInvoke(UriTemplate = "listitems/delete", Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest)]
+        bool DeleteListItem(User user, string itemId, string time);
     }
 }

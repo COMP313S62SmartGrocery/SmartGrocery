@@ -10,38 +10,8 @@ namespace SmartGroceryApiLibrary.DataAccess
 {
     public class ListItemSet
     {
-        private ListSet listSet;
 
-        public ListItemSet()
-        {
-            listSet = new ListSet();
-        }
-
-        public bool AddListItem(ListItem listItem)
-        {
-            ConnectionManager connection = new ConnectionManager();
-            connection.Open();
-
-            SqlCommand cmd = new SqlCommand("insert into ListItems(NAME,QUANTITY,UNIT,LASTMODIFIED,REMINDER,LISTID) "
-                                            + "values(@name,@quantity,@unit,@lastmodified,@reminder,@listid)", connection.con);
-            cmd.Parameters.Add(new SqlParameter("@name", listItem.Name));
-            cmd.Parameters.Add(new SqlParameter("@quantity", listItem.Quantity));
-            cmd.Parameters.Add(new SqlParameter("@unit", listItem.Unit));
-            cmd.Parameters.Add(new SqlParameter("@lastmodified", DateTime.Now.ToString(Constants.DATEFORMAT)));
-            cmd.Parameters.Add(new SqlParameter("@reminder", DateTime.Parse(listItem.Reminder).ToString(Constants.DATEFORMAT)));
-            cmd.Parameters.Add(new SqlParameter("@listid", listItem.ListId));
-
-            bool ret = cmd.ExecuteNonQuery() > 0;
-
-            //updating list modified date
-            listSet.ModifyNow(listItem.ListId);
-
-            connection.Close();
-
-            return ret;
-        }
-
-        public List<ListItem> GetListItems(long listId)
+        public static List<ListItem> GetListItems(long listId)
         {
             ConnectionManager connection = new ConnectionManager();
             connection.Open();
@@ -75,8 +45,37 @@ namespace SmartGroceryApiLibrary.DataAccess
 
             return items;
         }
+        public static long AddListItem(ListItem listItem)
+        {
+            ConnectionManager connection = new ConnectionManager();
+            connection.Open();
 
-        private long GetListId(long listItemId)
+            SqlCommand cmd = new SqlCommand("insert into ListItems(NAME,QUANTITY,UNIT,LASTMODIFIED,REMINDER,LISTID) "
+                                            + "values(@name,@quantity,@unit,@lastmodified,@reminder,@listid)", connection.con);
+            cmd.Parameters.Add(new SqlParameter("@name", listItem.Name));
+            cmd.Parameters.Add(new SqlParameter("@quantity", listItem.Quantity));
+            cmd.Parameters.Add(new SqlParameter("@unit", listItem.Unit));
+            cmd.Parameters.Add(new SqlParameter("@lastmodified", listItem.LastModified));
+            cmd.Parameters.Add(new SqlParameter("@reminder", DateTime.Parse(listItem.Reminder).ToString(Constants.DATEFORMAT)));
+            cmd.Parameters.Add(new SqlParameter("@listid", listItem.ListId));
+
+            long ret = -1;
+
+            if (cmd.ExecuteNonQuery() > 0)
+            {
+                cmd.CommandText = "Select @@Identity";
+                ret = long.Parse(cmd.ExecuteScalar().ToString());
+            }
+
+            //updating list modified date
+            ListSet.ModifyNow(listItem.ListId, listItem.LastModified);
+
+            connection.Close();
+
+            return ret;
+        }
+
+        private static long GetListId(long listItemId)
         {
             ConnectionManager connection = new ConnectionManager();
             connection.Open();
@@ -93,7 +92,7 @@ namespace SmartGroceryApiLibrary.DataAccess
             return ret;
         }
 
-        public bool UpdateListItem(ListItem listItem)
+        public static bool UpdateListItem(ListItem listItem)
         {
             ConnectionManager connection = new ConnectionManager();
             connection.Open();
@@ -103,21 +102,21 @@ namespace SmartGroceryApiLibrary.DataAccess
             cmd.Parameters.Add(new SqlParameter("@name", listItem.Name));
             cmd.Parameters.Add(new SqlParameter("@quantity", listItem.Quantity));
             cmd.Parameters.Add(new SqlParameter("@unit", listItem.Unit));
-            cmd.Parameters.Add(new SqlParameter("@lastmodified", DateTime.Now.ToString(Constants.DATEFORMAT)));
+            cmd.Parameters.Add(new SqlParameter("@lastmodified", listItem.LastModified));
             cmd.Parameters.Add(new SqlParameter("@reminder", DateTime.Parse(listItem.Reminder).ToString(Constants.DATEFORMAT)));
             cmd.Parameters.Add(new SqlParameter("@id", listItem.Id));
 
             bool ret = cmd.ExecuteNonQuery() > 0;
 
             //updating list modified date
-            listSet.ModifyNow(listItem.ListId);
+            ListSet.ModifyNow(listItem.ListId, listItem.LastModified);
 
             connection.Close();
 
             return ret;
         }
 
-        public bool DeleteListItem(int itemId)
+        public static bool DeleteListItem(int itemId, string time)
         {
             ConnectionManager connection = new ConnectionManager();
             connection.Open();
@@ -128,14 +127,14 @@ namespace SmartGroceryApiLibrary.DataAccess
             bool ret = cmd.ExecuteNonQuery() > 0;
 
             //updating list modified date
-            listSet.ModifyNow(GetListId(itemId));
+            ListSet.ModifyNow(GetListId(itemId), time);
 
             connection.Close();
 
             return ret;
         }
 
-        public int CountListItems(string listId)
+        public static int CountListItems(string listId)
         {
             ConnectionManager connection = new ConnectionManager();
             connection.Open();
