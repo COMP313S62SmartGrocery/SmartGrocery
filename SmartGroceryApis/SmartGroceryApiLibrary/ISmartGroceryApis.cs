@@ -84,27 +84,40 @@ namespace SmartGroceryApiLibrary
         [WebInvoke(UriTemplate = "history/clear", Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest)]
         bool ClearItemHistory(User user, string itemName);
 
-        /* Methods related to list table 
+        /* Methods related to list table */
         [OperationContract]
-        [WebInvoke(UriTemplate = "list/", Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest)]
-        bool GetLists(List<List> list);
+        [WebInvoke(UriTemplate = "list/", Method = "POST")]
+        List<List> GetLists(User user);
+
+        [OperationContract]
+        [WebInvoke(UriTemplate = "list/getLastModified", Method = "POST")]
+        string GetLastModified(User user, string listId);
 
         [OperationContract]
         [WebInvoke(UriTemplate = "list/add", Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest)]
-        bool AddList(List list, string sessionKey);
-
-        [OperationContract]
-        [WebInvoke(UriTemplate = "list/delete", Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest)]
-        bool DeleteList(long listId, string sessionKey);
-
-        [OperationContract]
-        [WebInvoke(UriTemplate = "list/duplicate", Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest)]
-        bool DuplicateList(long listId , string sessionKey);
+        string AddList(List list, User user);
 
         [OperationContract]
         [WebInvoke(UriTemplate = "list/rename", Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest)]
-        bool RenameList(long listId, string newName, string sessionKey);
-        */
+        bool RenameList(long listId, string newName, User user);
+
+        [OperationContract]
+        [WebInvoke(UriTemplate = "list/share", Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest)]
+        bool ShareList(long listId, string withUsername, User user);
+
+
+        [OperationContract]
+        [WebInvoke(UriTemplate = "list/unshare", Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest)]
+        bool UnshareList(long listId, string withUsername, User user);
+
+        [OperationContract]
+        [WebInvoke(UriTemplate = "list/duplicate", Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest)]
+        List DuplicateList(long listId, string listName, User user);
+
+        [OperationContract]
+        [WebInvoke(UriTemplate = "list/delete", Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest)]
+        bool DeleteList(long listId, User user);
+        
         /* Methods related to listitem table */
         [OperationContract]
         [WebInvoke(UriTemplate = "listitems/", Method = "POST", BodyStyle=WebMessageBodyStyle.WrappedRequest)]

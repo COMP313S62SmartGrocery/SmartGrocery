@@ -160,10 +160,85 @@ namespace SmartGroceryApiLibrary
 
         #endregion
 
+        #region List
+        public List<List> GetLists(User user)
+        {
+            if (IsValidUser(user))
+            {
+                return ListSet.GetLists(user.Username);
+            }
+            return null;
+        }
+
+        public string GetLastModified(User user, string listId)
+        {
+            if (IsValidUser(user))
+            {
+                return ListSet.GetLastModified(long.Parse(listId));
+            }
+            return "-1";
+        }
+
+        public string AddList(List list, User user)
+        {
+            if (IsValidUser(user))
+            {
+                return ListSet.AddList(list).ToString();
+            }
+            return "-1";
+        }
+
+        public bool RenameList(long listId, string newName, User user)
+        {
+            if (IsValidUser(user))
+            {
+                return ListSet.RenameList(listId, newName);
+            }
+            return false;
+        }
+
+        public bool ShareList(long listId, string withUsername, User user)
+        {
+            if (IsValidUser(user))
+            {
+                return ListSet.ShareList(listId, withUsername);
+            }
+            return false;
+        }
+
+        public bool UnshareList(long listId, string withUsername, User user)
+        {
+            if (IsValidUser(user))
+            {
+                return ListSet.UnShareList(listId, withUsername);
+            }
+            return false;
+        }
+
+        public List DuplicateList(long listId, string listName, User user)
+        {
+            if (IsValidUser(user))
+            {
+                return ListSet.DuplicateList(listId, listName, user.Username);
+            }
+            return null;
+        }
+
+        public bool DeleteList(long listId, User user)
+        {
+            if (IsValidUser(user))
+            {
+                return ListSet.DeleteList(listId);
+            }
+            return false;
+        }
+        #endregion
+
         #region ListItem
         public List<ListItem> GetListItems(User user, string listId)
         {
-            if (IsValidUser(user)) {
+            if (IsValidUser(user))
+            {
                 return ListItemSet.GetListItems(long.Parse(listId));
             }
             return null;
@@ -171,7 +246,7 @@ namespace SmartGroceryApiLibrary
 
         public int GetListItemsCount(User user, string listId)
         {
-            if(IsValidUser(user))
+            if (IsValidUser(user))
             {
                 return ListItemSet.CountListItems(listId);
             }
@@ -206,5 +281,6 @@ namespace SmartGroceryApiLibrary
             return false;
         }
         #endregion
+
     }
 }

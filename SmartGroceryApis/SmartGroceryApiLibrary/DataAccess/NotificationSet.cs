@@ -20,7 +20,7 @@ namespace SmartGroceryApiLibrary.DataAccess
             cmd.Parameters.Add(new SqlParameter("@from", notification.From));
             cmd.Parameters.Add(new SqlParameter("@subject", notification.Subject));
             cmd.Parameters.Add(new SqlParameter("@text", notification.Text));
-            cmd.Parameters.Add(new SqlParameter("@date", DateTime.Now.ToString(Constants.DATEFORMAT)));
+            cmd.Parameters.Add(new SqlParameter("@date", notification.Date));
             cmd.Parameters.Add(new SqlParameter("@username", notification.Username));
 
             bool ret = cmd.ExecuteNonQuery() > 0;

@@ -18,7 +18,7 @@ namespace SmartGroceryApiLibrary.DataAccess
             SqlCommand cmd = new SqlCommand("insert into LISTS(NAME,COLOR,LASTMODIFIED,USERNAME) values(@name,@color,@lastmodified,@username)", connection.con);
             cmd.Parameters.Add(new SqlParameter("@name", list.Name));
             cmd.Parameters.Add(new SqlParameter("@color", list.Color));
-            cmd.Parameters.Add(new SqlParameter("@lastmodified", DateTime.Now.ToString(Constants.DATEFORMAT)));
+            cmd.Parameters.Add(new SqlParameter("@lastmodified", list.LastModified));
             cmd.Parameters.Add(new SqlParameter("@username", list.Username));
 
             long ret = -1;
@@ -65,7 +65,23 @@ namespace SmartGroceryApiLibrary.DataAccess
             return ret;
         }
 
-        public static List DuplicateList(int id, string name, string username)
+        public static bool RenameList(long listId, string name)
+        {
+            ConnectionManager connection = new ConnectionManager();
+            connection.Open();
+
+            SqlCommand cmd = new SqlCommand("UPDATE LISTS SET NAME=@name where ID=@id", connection.con);
+            cmd.Parameters.Add(new SqlParameter("@id", listId));
+            cmd.Parameters.Add(new SqlParameter("@name", name));
+
+            bool ret = cmd.ExecuteNonQuery() > 0;
+
+            connection.Close();
+
+            return ret;
+        }
+
+        public static List DuplicateList(long id, string name, string username)
         {
             ConnectionManager connection = new ConnectionManager();
             connection.Open();
@@ -105,23 +121,27 @@ namespace SmartGroceryApiLibrary.DataAccess
         }
 
 
-        public static bool ShareList(int listId, string withUsername)
+        public static bool ShareList(long listId, string withUsername)
         {
-            ConnectionManager connection = new ConnectionManager();
-            connection.Open();
+            if (UserSet.IsExists(withUsername))
+            {
+                ConnectionManager connection = new ConnectionManager();
+                connection.Open();
 
-            SqlCommand cmd = new SqlCommand("UPDATE Lists SET USERNAME=USERNAME+@newUser where ID=@id", connection.con);
-            cmd.Parameters.Add(new SqlParameter("@id", listId));
-            cmd.Parameters.Add(new SqlParameter("@newUser", ","+withUsername));
+                SqlCommand cmd = new SqlCommand("UPDATE Lists SET USERNAME=USERNAME+@newUser where ID=@id", connection.con);
+                cmd.Parameters.Add(new SqlParameter("@id", listId));
+                cmd.Parameters.Add(new SqlParameter("@newUser", "," + withUsername));
 
-            bool ret = cmd.ExecuteNonQuery() > 0;
+                bool ret = cmd.ExecuteNonQuery() > 0;
 
-            connection.Close();
+                connection.Close();
 
-            return ret;
+                return ret;
+            }
+            return false;
         }
 
-        public static string GetSharingDetails(long listId)
+        private static string GetSharingDetails(long listId)
         {
             ConnectionManager connection = new ConnectionManager();
             connection.Open();
@@ -136,7 +156,7 @@ namespace SmartGroceryApiLibrary.DataAccess
             return sharingDetails;
         }
 
-        public static bool UnShareList(int listId, string withUsername)
+        public static bool UnShareList(long listId, string withUsername)
         {
             ConnectionManager connection = new ConnectionManager();
             connection.Open();
@@ -156,13 +176,17 @@ namespace SmartGroceryApiLibrary.DataAccess
             return ret;
         }
 
-        public static bool DeleteList(int listId)
+        public static bool DeleteList(long listId)
         {
             ConnectionManager connection = new ConnectionManager();
             connection.Open();
-
-            SqlCommand cmd = new SqlCommand("delete from Lists where ID=@id", connection.con);
+            
+            //deleting list items
+            SqlCommand cmd = new SqlCommand("delete from ListItems where LISTID=@id", connection.con);
             cmd.Parameters.Add(new SqlParameter("@id", listId));
+            cmd.ExecuteNonQuery();
+
+            cmd.CommandText = "delete from Lists where ID=@id";
 
             bool ret = cmd.ExecuteNonQuery() > 0;
 
@@ -171,7 +195,7 @@ namespace SmartGroceryApiLibrary.DataAccess
             return ret;
         }
 
-        public static List GetList(long listId)
+        private static List GetList(long listId)
         {
             ConnectionManager connection = new ConnectionManager();
             connection.Open();

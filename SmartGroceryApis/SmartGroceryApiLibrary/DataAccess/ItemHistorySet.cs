@@ -20,7 +20,7 @@ namespace SmartGroceryApiLibrary.DataAccess
             cmd.Parameters.Add(new SqlParameter("@name", itemHistory.Name));
             cmd.Parameters.Add(new SqlParameter("@quantity", itemHistory.Quantity));
             cmd.Parameters.Add(new SqlParameter("@unit", itemHistory.Unit));
-            cmd.Parameters.Add(new SqlParameter("@date", DateTime.Now.ToString(Constants.DATEFORMAT)));
+            cmd.Parameters.Add(new SqlParameter("@date", itemHistory.Date));
             cmd.Parameters.Add(new SqlParameter("@username", itemHistory.Username));
 
             bool ret = cmd.ExecuteNonQuery() > 0;
