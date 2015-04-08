@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" 
+    android:padding="@dimen/pad10">
+
+    <TextView
+        android:id="@+id/tvSubject"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/pad10"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+	
+	<View
+    android:layout_width="match_parent"
+    android:layout_height="1dip"
+    android:background="?android:attr/dividerHorizontal" />
+	
+	 <TextView
+        android:id="@+id/tvFrom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/pad10"
+        android:textStyle="bold"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+	  <TextView
+        android:id="@+id/tvDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/secondary_text_light"
+        android:layout_marginTop="@dimen/pad5"
+        android:layout_marginBottom="@dimen/pad10"
+        android:textAppearance="?android:attr/textAppearanceSmallInverse" />
+	  
+	  
+	<View
+    android:layout_width="match_parent"
+    android:layout_height="1dip"
+    android:background="?android:attr/dividerHorizontal" />
+	
+	<TextView
+	    android:id="@+id/tvText"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:layout_marginTop="@dimen/pad10"
+	    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+</LinearLayout>
