@@ -1,8 +1,6 @@
 package comp313.g2.smartgrocery.helpers;
 
 import comp313.g2.smartgrocery.datasources.ListDataSource;
-import comp313.g2.smartgrocery.datasources.NotificationDataSource;
-
 import android.content.Context;
 import android.database.sqlite.*;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
@@ -20,7 +18,6 @@ public class GroceryDataHelper extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		// TODO Auto-generated method stub
 		db.execSQL(ListDataSource.CREATE_TABLE);
-		db.execSQL(NotificationDataSource.CREATE_TABLE);
 	}
 
 	@Override

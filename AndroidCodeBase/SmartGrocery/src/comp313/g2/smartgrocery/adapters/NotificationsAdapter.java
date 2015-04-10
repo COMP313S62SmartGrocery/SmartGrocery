@@ -36,7 +36,7 @@ public class NotificationsAdapter extends BaseAdapter {
 
 	@Override
 	public long getItemId(int position) {
-		return list.get(position).getId();
+		return list.get(position).Id;
 	}
 
 	@Override
@@ -48,9 +48,9 @@ public class NotificationsAdapter extends BaseAdapter {
 			
 			TextView tvFrom = (TextView) view.findViewById(R.id.text1);
 			TextView tvSubject = (TextView) view.findViewById(R.id.text2);
-			tvFrom.setText(list.get(position).getFrom());
-			tvSubject.setText(list.get(position).getSubject());
-			if(!list.get(position).isRead()){
+			tvFrom.setText(list.get(position).From);
+			tvSubject.setText(list.get(position).Subject);
+			if(!list.get(position).isRead){
 				tvFrom.setTypeface(tvFrom.getTypeface(), Typeface.BOLD);
 				tvSubject.setTypeface(tvSubject.getTypeface(), Typeface.BOLD);
 			}

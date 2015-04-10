@@ -4,6 +4,7 @@
     android:orientation="vertical"
     android:layout_height="?android:attr/listPreferredItemHeight"
     android:paddingTop="2dip"
+    android:paddingLeft="10dp"
     android:paddingBottom="2dip"
     android:paddingStart="10dip"
     android:paddingEnd="10dip">

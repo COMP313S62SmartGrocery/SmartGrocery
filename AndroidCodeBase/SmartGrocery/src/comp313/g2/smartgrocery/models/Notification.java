@@ -1,47 +1,51 @@
 package comp313.g2.smartgrocery.models;
 
-public class Notification {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Notification implements Parcelable {
 	//private fields
-	private int id;
-	private String from, subject, text, date;
-	private boolean isRead = false;
+	public int Id=-1;
+	public String From="", Subject="", Text="", Date="",Username="";
+	public boolean isRead = false;
 	
-	//constructors
-	public Notification(int id, String from, String subject, String text, String date){
-		this.id = id;
-		this.from = from;
-		this.subject = subject;
-		this.date = date;
-		this.text = text;
-	}
-	
-	public Notification(int id, String from, String subject, String text, String date, boolean isRead){
-		this(id, from, subject, text, date);
-		this.isRead = isRead;
+	public Notification(Parcel in) {
+        Id = in.readInt();
+        Date = in.readString();
+        From = in.readString();
+        Subject =in.readString();
+        Text = in.readString();
+        Username =in.readString();
+        isRead = in.readInt()==1?true:false;
 	}
 	
-	//getters and setters
-	public int getId() {
-		return id;
+	public Notification(){
+		
 	}
-	public String getFrom() {
-		return from;
+	
+	@Override
+	public int describeContents() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
-	public String getSubject() {
-		return subject;
+	@Override
+	public void writeToParcel(Parcel arg0, int arg1) {
+		arg0.writeInt(Id);
+		arg0.writeString(Date);
+		arg0.writeString(From);
+		arg0.writeString(Subject);
+		arg0.writeString(Text);
+		arg0.writeString(Username);
+		arg0.writeInt(isRead?1:0);
 	}
-	public String getText() {
-		return text;
-	}
-	public String getDate() {
-		return date;
-	}
+	
+	public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+        public Notification createFromParcel(Parcel in) {
+            return new Notification(in); 
+        }
 
-	public boolean isRead() {
-		return isRead;
-	}
-
-	public void setRead(boolean isRead) {
-		this.isRead = isRead;
-	}
+        public Notification[] newArray(int size) {
+            return new Notification[size];
+        }
+    };
 }

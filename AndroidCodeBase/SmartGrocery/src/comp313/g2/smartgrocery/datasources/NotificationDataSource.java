@@ -1,5 +1,5 @@
 package comp313.g2.smartgrocery.datasources;
-
+/*
 import java.util.ArrayList;
 
 import android.content.ContentValues;
@@ -115,3 +115,4 @@ public class NotificationDataSource {
 		return notificationList; // returning list
 	}
 }
+*/
