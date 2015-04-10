@@ -17,7 +17,7 @@ public class NutritionDetailsAdapter extends BaseAdapter {
 	public NutritionDetailsAdapter(Context context,
 			HashMap<String, String> details) {
 		nutritionName = details.keySet().toArray();
-		nutritionValue =  details.values().toArray();
+		nutritionValue = details.values().toArray();
 		this.context = context;
 	}
 
@@ -37,21 +37,19 @@ public class NutritionDetailsAdapter extends BaseAdapter {
 	}
 
 	@Override
-	public View getView(int pos, View convertView, ViewGroup arg2) {
-		if (convertView == null) {
-			View view = ((LayoutInflater) context
+	public View getView(int pos, View view, ViewGroup arg2) {
+		if (view == null) {
+			view = ((LayoutInflater) context
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE))
 					.inflate(R.layout.list_item_nutrition_detail, null);
-			
-			TextView nutrition = (TextView) view.findViewById(R.id.textView1);
-			nutrition.setText(nutritionName[pos].toString());
-			
-			TextView value = (TextView) view.findViewById(R.id.textView2);
-			value.setText(nutritionValue[pos].toString());
-			
-			return view;
 		}
-		return convertView;
+		TextView nutrition = (TextView) view.findViewById(R.id.textView1);
+		nutrition.setText(nutritionName[pos].toString());
+
+		TextView value = (TextView) view.findViewById(R.id.textView2);
+		value.setText(nutritionValue[pos].toString());
+
+		return view;
 	}
 
 }
