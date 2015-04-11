@@ -13,12 +13,16 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.MenuItem;
 import android.view.View;
 import android.support.v4.widget.DrawerLayout;
 
 import java.util.ArrayList;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.util.Log;
@@ -27,6 +31,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
  
 public class MainActivity extends Activity {
+	private SharedPreferences prefs;
+	
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -64,7 +70,7 @@ public class MainActivity extends Activity {
         navDrawerItems.add(new NavDrawerItem("Reports", android.R.drawable.ic_menu_recent_history));
         navDrawerItems.add(new NavDrawerItem("Nutrition Info", android.R.drawable.ic_menu_info_details));
         navDrawerItems.add(new NavDrawerItem("Settings", android.R.drawable.ic_menu_manage));
-        navDrawerItems.add(new NavDrawerItem("Exit", android.R.drawable.ic_lock_power_off));
+        navDrawerItems.add(new NavDrawerItem("Sign Out", android.R.drawable.ic_lock_power_off));
         
  
         mDrawerList.setOnItemClickListener(new SlideMenuClickListener());
@@ -103,6 +109,8 @@ public class MainActivity extends Activity {
         notificationsFragment = new NotificationsFragment();
         reportsFragment = new ReportsFragment();
         nutritionInfoFragment = new NutritionInfoFragment();
+        
+        prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         
         if (savedInstanceState == null) {
             // on first time display view for first nav item
@@ -173,7 +181,19 @@ public class MainActivity extends Activity {
         	fragment = settingsFragment;
         	break;
         case 5:
-        	finishAffinity(); //finishing activity
+        	Editor editor = prefs.edit();
+        	editor.clear();
+        	editor.commit();
+        	
+        	//starting login activity
+        	Intent i = new Intent(MainActivity.this, LoginActivity.class);
+        	i.addCategory(Intent.CATEGORY_DEFAULT);
+    		i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    		i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    		i.addFlags(Intent.FLAG_ACTIVITY_TASK_ON_HOME);
+        	i.setAction(Intent.ACTION_MAIN);
+        	startActivity(i);
+        	break;
         default:
             break;
         }

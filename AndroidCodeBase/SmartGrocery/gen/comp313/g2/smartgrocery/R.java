@@ -44,60 +44,63 @@ public final class R {
         public static final int ic_drawer=0x7f020003;
         public static final int ic_launcher=0x7f020004;
         public static final int ic_menu_notifications=0x7f020005;
-        public static final int list_item_bg_normal=0x7f020006;
-        public static final int list_item_bg_pressed=0x7f020007;
-        public static final int list_selector=0x7f020008;
+        public static final int launcher=0x7f020006;
+        public static final int list_item_bg_normal=0x7f020007;
+        public static final int list_item_bg_pressed=0x7f020008;
+        public static final int list_selector=0x7f020009;
     }
     public static final class id {
-        public static final int btnAbout=0x7f09002f;
+        public static final int btnAbout=0x7f090030;
         public static final int btnAdd=0x7f090021;
         public static final int btnCancel=0x7f090020;
-        public static final int btnHelp=0x7f09002e;
-        public static final int btnSearch=0x7f090029;
+        public static final int btnHelp=0x7f09002f;
+        public static final int btnRename=0x7f090022;
+        public static final int btnSearch=0x7f09002a;
         public static final int btnSignIn=0x7f090009;
         public static final int btnSignUp=0x7f09000f;
-        public static final int counter=0x7f090024;
+        public static final int counter=0x7f090025;
         public static final int cpListColor=0x7f09001f;
         public static final int drawer_layout=0x7f090014;
         public static final int etConfirmPassword=0x7f09000e;
         public static final int etListName=0x7f09001e;
         public static final int etPassword=0x7f090008;
-        public static final int etSearch=0x7f090028;
+        public static final int etSearch=0x7f090029;
         public static final int etSignUpPassword=0x7f09000d;
         public static final int etSignUpUsername=0x7f09000c;
         public static final int etUsername=0x7f090007;
         public static final int frame_container=0x7f090015;
-        public static final int icon=0x7f090022;
+        public static final int icon=0x7f090023;
         public static final int imageView1=0x7f090000;
-        public static final int itemAdd=0x7f090037;
-        public static final int itemDelete=0x7f090035;
-        public static final int itemDuplicate=0x7f090034;
-        public static final int itemShare=0x7f090036;
-        public static final int ivEmptyList=0x7f090025;
-        public static final int lcChart=0x7f09002b;
+        public static final int itemAdd=0x7f090039;
+        public static final int itemDelete=0x7f090036;
+        public static final int itemDuplicate=0x7f090035;
+        public static final int itemRename=0x7f090037;
+        public static final int itemShare=0x7f090038;
+        public static final int ivEmptyList=0x7f090026;
+        public static final int lcChart=0x7f09002c;
         public static final int list_slidermenu=0x7f090016;
         public static final int llConnectingView=0x7f090011;
         public static final int llEmptyView=0x7f09001b;
         public static final int llSignInView=0x7f090006;
         public static final int llSignUpView=0x7f09000b;
         public static final int lvItems=0x7f090005;
-        public static final int lvLists=0x7f090026;
+        public static final int lvLists=0x7f090027;
         public static final int lvSearchResult=0x7f09001d;
         public static final int progressBar1=0x7f090012;
-        public static final int switchNotification=0x7f09002c;
-        public static final int switchNotificationSound=0x7f09002d;
-        public static final int text1=0x7f090030;
-        public static final int text2=0x7f090031;
-        public static final int textView1=0x7f090032;
-        public static final int textView2=0x7f090033;
-        public static final int title=0x7f090023;
+        public static final int switchNotification=0x7f09002d;
+        public static final int switchNotificationSound=0x7f09002e;
+        public static final int text1=0x7f090031;
+        public static final int text2=0x7f090032;
+        public static final int textView1=0x7f090033;
+        public static final int textView2=0x7f090034;
+        public static final int title=0x7f090024;
         public static final int tvAppname=0x7f090001;
         public static final int tvCopyRights=0x7f090003;
         public static final int tvDate=0x7f090019;
-        public static final int tvEmptyList=0x7f090027;
+        public static final int tvEmptyList=0x7f090028;
         public static final int tvFrom=0x7f090018;
         public static final int tvLoading=0x7f09001c;
-        public static final int tvSearchHint=0x7f09002a;
+        public static final int tvSearchHint=0x7f09002b;
         public static final int tvSignIn=0x7f090010;
         public static final int tvSignUp=0x7f09000a;
         public static final int tvSubject=0x7f090017;
@@ -115,14 +118,15 @@ public final class R {
         public static final int activity_notification=0x7f030005;
         public static final int activity_nutrition_details=0x7f030006;
         public static final int dialog_add_list=0x7f030007;
-        public static final int drawer_list_item=0x7f030008;
-        public static final int fragment_lists=0x7f030009;
-        public static final int fragment_notifications=0x7f03000a;
-        public static final int fragment_nutrition_info=0x7f03000b;
-        public static final int fragment_reports=0x7f03000c;
-        public static final int fragment_settings=0x7f03000d;
-        public static final int list_item_notifications=0x7f03000e;
-        public static final int list_item_nutrition_detail=0x7f03000f;
+        public static final int dialog_rename_list=0x7f030008;
+        public static final int drawer_list_item=0x7f030009;
+        public static final int fragment_lists=0x7f03000a;
+        public static final int fragment_notifications=0x7f03000b;
+        public static final int fragment_nutrition_info=0x7f03000c;
+        public static final int fragment_reports=0x7f03000d;
+        public static final int fragment_settings=0x7f03000e;
+        public static final int list_item_notifications=0x7f03000f;
+        public static final int list_item_nutrition_detail=0x7f030010;
     }
     public static final class menu {
         public static final int context_menu_lists=0x7f080000;
@@ -134,30 +138,32 @@ public final class R {
         public static final int app_name=0x7f040000;
         /**  Button Strings 
          */
-        public static final int btn_add=0x7f04000d;
-        public static final int btn_cancel=0x7f04000e;
+        public static final int btn_add=0x7f04000f;
+        public static final int btn_cancel=0x7f040010;
         /**   Dialog title strings 
          */
         public static final int dialog_add_list=0x7f040006;
+        public static final int dialog_rename_list=0x7f040007;
         /**  Input hints 
          */
-        public static final int hint_name=0x7f04000f;
+        public static final int hint_name=0x7f040011;
         /**   Menu Strings 
          */
-        public static final int menu_add=0x7f040007;
-        public static final int menu_delete=0x7f040009;
-        public static final int menu_duplicate=0x7f040008;
-        public static final int menu_share=0x7f04000a;
+        public static final int menu_add=0x7f040008;
+        public static final int menu_delete=0x7f04000a;
+        public static final int menu_duplicate=0x7f040009;
+        public static final int menu_rename=0x7f04000c;
+        public static final int menu_share=0x7f04000b;
         /**  Miscellaneous Strings 
          */
-        public static final int no_notifications=0x7f040010;
-        public static final int str_color=0x7f04000c;
-        public static final int str_copyright=0x7f040012;
+        public static final int no_notifications=0x7f040012;
+        public static final int str_color=0x7f04000e;
+        public static final int str_copyright=0x7f040014;
         /**  Label Strings 
          */
-        public static final int str_name=0x7f04000b;
-        public static final int str_search_hint=0x7f040013;
-        public static final int str_version=0x7f040011;
+        public static final int str_name=0x7f04000d;
+        public static final int str_search_hint=0x7f040015;
+        public static final int str_version=0x7f040013;
         /**   Title String  
          */
         public static final int title_lists=0x7f040001;

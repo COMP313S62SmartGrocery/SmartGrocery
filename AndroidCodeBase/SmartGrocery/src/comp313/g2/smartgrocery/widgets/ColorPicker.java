@@ -87,4 +87,8 @@ public class ColorPicker extends View implements View.OnTouchListener {
 	public int getSelectedColor(){
 		return selectedColor;
 	}
+	
+	public String getSelectedColorString(){
+		return String.format("#%02x%02x%02x",Color.red(selectedColor) , Color.green(selectedColor), Color.blue(selectedColor));
+	}
 }

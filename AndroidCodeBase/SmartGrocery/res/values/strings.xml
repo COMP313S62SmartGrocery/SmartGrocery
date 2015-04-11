@@ -12,12 +12,14 @@
     
     <!--  Dialog title strings -->
     <string name="dialog_add_list">Add List</string>
+    <string name="dialog_rename_list">Rename List</string>
     
     <!--  Menu Strings -->
     <string name="menu_add">Add</string>
     <string name="menu_duplicate">Duplicate</string>
     <string name="menu_delete">Delete</string>
     <string name="menu_share">Share</string>
+    <string name="menu_rename">Rename</string>
     
     <!-- Label Strings -->
     <string name="str_name">Name</string>

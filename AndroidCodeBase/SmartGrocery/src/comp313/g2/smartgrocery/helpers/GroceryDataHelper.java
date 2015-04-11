@@ -1,6 +1,5 @@
 package comp313.g2.smartgrocery.helpers;
 
-import comp313.g2.smartgrocery.datasources.ListDataSource;
 import android.content.Context;
 import android.database.sqlite.*;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
@@ -17,7 +16,7 @@ public class GroceryDataHelper extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		// TODO Auto-generated method stub
-		db.execSQL(ListDataSource.CREATE_TABLE);
+		//db.execSQL(ListDataSource.CREATE_TABLE);
 	}
 
 	@Override

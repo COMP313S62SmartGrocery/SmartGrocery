@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import comp313.g2.smartgrocery.models.List;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,21 +34,21 @@ public class ListsAdapter extends BaseAdapter {
 
 	@Override
 	public long getItemId(int position) {
-		return list.get(position).getId();
+		return list.get(position).Id;
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		if(convertView!=null){
-			return convertView;
-		}else{
-			View view = ((LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(android.R.layout.simple_list_item_1, null);
-			
-			view.setBackgroundColor(list.get(position).getColor());
-			TextView tvITem = (TextView) view.findViewById(android.R.id.text1);
-			tvITem.setText(list.get(position).getName());
-			
-			return view;
+	public View getView(int position, View view, ViewGroup parent) {
+		if(view==null){
+			view = ((LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(android.R.layout.simple_list_item_1, null);			
 		}
+		
+		String color = list.get(position).Color;
+		
+		view.setBackgroundColor(Color.parseColor(color));
+		TextView tvITem = (TextView) view.findViewById(android.R.id.text1);
+		tvITem.setText(list.get(position).Name);
+
+		return view;
 	}
 }
