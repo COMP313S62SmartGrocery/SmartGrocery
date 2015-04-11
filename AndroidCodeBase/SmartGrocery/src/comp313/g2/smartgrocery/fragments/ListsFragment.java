@@ -41,15 +41,17 @@ public class ListsFragment extends Fragment implements OnItemClickListener,
 	private ArrayList<List> list;
 	private ListView lvLists;
 	private Context context;
-	private Dialog dialogAddList, dialogRenameList;
+	private Dialog dialogAddList, dialogRenameList, dialogDuplicateList;
 
 	// field to set position of selected item
 	private int selectedItemPosition = -1;
 
 	// dialog ui controls
-	private EditText etListName, etRenameListName;
+	private EditText etListName, etRenameListName, etDuplicateListName;
 	private ColorPicker colorPicker;
-	private Button btnAdd, btnCancel, btnRename, btnRenameCancel;
+	private Button btnAdd, btnCancel;
+	private Button btnRename, btnRenameCancel;
+	private Button btnDuplicate, btnDuplicateCancel;
 
 	private SharedPreferences prefs;
 	private User user;
@@ -113,6 +115,23 @@ public class ListsFragment extends Fragment implements OnItemClickListener,
 		btnRenameCancel = (Button) dialogRenameList
 				.findViewById(R.id.btnCancel);
 		btnRenameCancel.setOnClickListener(this);
+
+		// initializing duplicate list dialog
+		dialogDuplicateList = new Dialog(getActivity());
+		dialogDuplicateList.setTitle(getActivity().getString(
+				R.string.dialog_duplicate_list));
+		dialogDuplicateList.setCancelable(false);
+		dialogDuplicateList.setContentView(R.layout.dialog_duplicate_list);
+
+		etDuplicateListName = (EditText) dialogDuplicateList
+				.findViewById(R.id.etListName);
+		btnDuplicate = (Button) dialogDuplicateList
+				.findViewById(R.id.btnRename);
+		btnDuplicate.setOnClickListener(this);
+
+		btnDuplicateCancel = (Button) dialogDuplicateList
+				.findViewById(R.id.btnCancel);
+		btnDuplicateCancel.setOnClickListener(this);
 
 		// initializing dialog ui controls
 		etListName = (EditText) dialogAddList.findViewById(R.id.etListName);
@@ -208,6 +227,73 @@ public class ListsFragment extends Fragment implements OnItemClickListener,
 				if (GeneralHelpers.IsConnected(context)) {
 					btnRename.setEnabled(false);
 					btnRenameCancel.setEnabled(false);
+
+					final List item = list.get(selectedItemPosition);
+					new Thread(new Runnable() {
+
+						@Override
+						public void run() {
+							try {
+								final boolean success = helper.RenameList(user,
+										item.Id, newName);
+
+								// performing post rename operations
+								getActivity().runOnUiThread(new Runnable() {
+
+									@Override
+									public void run() {
+										if (success) {
+											// removing item from the local
+											// array
+											item.Name = newName;
+
+											// notifying dataset change
+											((BaseAdapter) lvLists.getAdapter())
+													.notifyDataSetChanged();
+											// resetting selected index
+											selectedItemPosition = -1;
+										} else {
+											Toast.makeText(context,
+													"Unable to connect!",
+													Toast.LENGTH_SHORT).show();
+										}
+
+										// resetting text
+										etRenameListName.setText("");
+										dialogRenameList.dismiss();
+										btnRename.setEnabled(true);
+										btnRenameCancel.setEnabled(true);
+									}
+								});
+							} catch (final Exception e) {
+								getActivity().runOnUiThread(new Runnable() {
+									public void run() {
+										Toast.makeText(context, e.getMessage(),
+											Toast.LENGTH_SHORT).show();	
+									}
+								});
+							}
+
+						}
+					}).start();
+				} else {
+					Toast.makeText(context, "Unable to connect!",
+							Toast.LENGTH_SHORT).show();
+				}
+			}
+		} else if (view == btnDuplicateCancel) {
+			dialogDuplicateList.dismiss();
+		} else if (view == btnDuplicate) {
+			// validating
+			final String listName = etDuplicateListName.getText().toString().trim();
+			if (listName.length() == 0) {
+				etDuplicateListName.setError("Enter name!");
+			} else if (isListExists(listName)) {
+				etDuplicateListName.setError("Name already exists!");
+			} else {
+				if (GeneralHelpers.IsConnected(context)) {
+					btnDuplicate.setEnabled(false);
+					btnDuplicateCancel.setEnabled(false);
 					
 					final List item = list.get(selectedItemPosition);
 					new Thread(new Runnable() {
@@ -215,16 +301,16 @@ public class ListsFragment extends Fragment implements OnItemClickListener,
 						@Override
 						public void run() {
 							try {
-								final boolean success = helper.RenameList(user, item.Id, newName);
+								final List success = helper.DuplicateList(user, item.Id, listName);
 								
 								// performing post rename operations
 								getActivity().runOnUiThread(new Runnable() {
 
 									@Override
 									public void run() {
-										if(success){
+										if(success!=null){
 										// removing item from the local array
-										item.Name = newName;
+										list.add(success);
 										
 										// notifying dataset change
 										((BaseAdapter) lvLists.getAdapter())
@@ -237,15 +323,21 @@ public class ListsFragment extends Fragment implements OnItemClickListener,
 										}
 										
 										// resetting text
-										etRenameListName.setText("");
-										dialogRenameList.dismiss();
-										btnRename.setEnabled(true);
-										btnRenameCancel.setEnabled(true);
+										etDuplicateListName.setText("");
+										dialogDuplicateList.dismiss();
+										btnDuplicate.setEnabled(true);
+										btnDuplicateCancel.setEnabled(true);
 									}
 								});
-							} catch (Exception e) {
-								Toast.makeText(context, e.getMessage(),
-										Toast.LENGTH_SHORT).show();
+							} catch (final Exception e) {
+								getActivity().runOnUiThread(new Runnable() {
+									
+									@Override
+									public void run() {
+										Toast.makeText(context, e.getMessage(),
+												Toast.LENGTH_SHORT).show();										
+									}
+								});
 							}
 
 						}
@@ -419,6 +511,9 @@ public class ListsFragment extends Fragment implements OnItemClickListener,
 				break;
 			case R.id.itemRename:
 				dialogRenameList.show();
+				break;
+			case R.id.itemDuplicate:
+				dialogDuplicateList.show();
 				break;
 			default:
 				break;

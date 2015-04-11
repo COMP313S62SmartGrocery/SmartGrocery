@@ -21,7 +21,7 @@ public class ServiceHelper {
 
 	// private static final String baseURL =
 	// "http://10.24.68.148/WeMeetService/WeMeetService.svc/json/";
-	private static final String baseURL = "http://192.168.43.89/SmartGroceryApi/SmartGroceryApi.svc/json/";
+	private static final String baseURL = "http://192.168.0.105/SmartGroceryApi/SmartGroceryApi.svc/json/";
 	
 	public String RegisterUser(User user) throws Exception {
 		return GetData(
@@ -174,7 +174,7 @@ public class ServiceHelper {
 	public comp313.g2.smartgrocery.models.List DuplicateList(User user, long listId, String newListName) throws Exception {
 		
 		String response = GetData(
-				baseURL + "list/delete",
+				baseURL + "list/duplicate",
 				"{" +
 				"\"user\":{" +
 					"\"Username\":\"" + user.Username + "\"," +

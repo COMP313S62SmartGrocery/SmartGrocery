@@ -13,6 +13,7 @@
     <!--  Dialog title strings -->
     <string name="dialog_add_list">Add List</string>
     <string name="dialog_rename_list">Rename List</string>
+    <string name="dialog_duplicate_list">Duplicate List</string>
     
     <!--  Menu Strings -->
     <string name="menu_add">Add</string>

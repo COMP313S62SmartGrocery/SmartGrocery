@@ -6,5 +6,9 @@
         android:icon="@android:drawable/ic_menu_add"
         android:showAsAction="always"
         android:title="@string/menu_add"/>
+    
+    <item android:id="@+id/itemTemplates"
+        android:title="View templates"
+        android:showAsAction="never" />
 
 </menu>

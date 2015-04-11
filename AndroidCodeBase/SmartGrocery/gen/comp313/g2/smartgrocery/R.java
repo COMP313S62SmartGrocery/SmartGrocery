@@ -76,6 +76,7 @@ public final class R {
         public static final int itemDuplicate=0x7f090035;
         public static final int itemRename=0x7f090037;
         public static final int itemShare=0x7f090038;
+        public static final int itemTemplates=0x7f09003a;
         public static final int ivEmptyList=0x7f090026;
         public static final int lcChart=0x7f09002c;
         public static final int list_slidermenu=0x7f090016;
@@ -118,15 +119,16 @@ public final class R {
         public static final int activity_notification=0x7f030005;
         public static final int activity_nutrition_details=0x7f030006;
         public static final int dialog_add_list=0x7f030007;
-        public static final int dialog_rename_list=0x7f030008;
-        public static final int drawer_list_item=0x7f030009;
-        public static final int fragment_lists=0x7f03000a;
-        public static final int fragment_notifications=0x7f03000b;
-        public static final int fragment_nutrition_info=0x7f03000c;
-        public static final int fragment_reports=0x7f03000d;
-        public static final int fragment_settings=0x7f03000e;
-        public static final int list_item_notifications=0x7f03000f;
-        public static final int list_item_nutrition_detail=0x7f030010;
+        public static final int dialog_duplicate_list=0x7f030008;
+        public static final int dialog_rename_list=0x7f030009;
+        public static final int drawer_list_item=0x7f03000a;
+        public static final int fragment_lists=0x7f03000b;
+        public static final int fragment_notifications=0x7f03000c;
+        public static final int fragment_nutrition_info=0x7f03000d;
+        public static final int fragment_reports=0x7f03000e;
+        public static final int fragment_settings=0x7f03000f;
+        public static final int list_item_notifications=0x7f030010;
+        public static final int list_item_nutrition_detail=0x7f030011;
     }
     public static final class menu {
         public static final int context_menu_lists=0x7f080000;
@@ -138,32 +140,33 @@ public final class R {
         public static final int app_name=0x7f040000;
         /**  Button Strings 
          */
-        public static final int btn_add=0x7f04000f;
-        public static final int btn_cancel=0x7f040010;
+        public static final int btn_add=0x7f040010;
+        public static final int btn_cancel=0x7f040011;
         /**   Dialog title strings 
          */
         public static final int dialog_add_list=0x7f040006;
+        public static final int dialog_duplicate_list=0x7f040008;
         public static final int dialog_rename_list=0x7f040007;
         /**  Input hints 
          */
-        public static final int hint_name=0x7f040011;
+        public static final int hint_name=0x7f040012;
         /**   Menu Strings 
          */
-        public static final int menu_add=0x7f040008;
-        public static final int menu_delete=0x7f04000a;
-        public static final int menu_duplicate=0x7f040009;
-        public static final int menu_rename=0x7f04000c;
-        public static final int menu_share=0x7f04000b;
+        public static final int menu_add=0x7f040009;
+        public static final int menu_delete=0x7f04000b;
+        public static final int menu_duplicate=0x7f04000a;
+        public static final int menu_rename=0x7f04000d;
+        public static final int menu_share=0x7f04000c;
         /**  Miscellaneous Strings 
          */
-        public static final int no_notifications=0x7f040012;
-        public static final int str_color=0x7f04000e;
-        public static final int str_copyright=0x7f040014;
+        public static final int no_notifications=0x7f040013;
+        public static final int str_color=0x7f04000f;
+        public static final int str_copyright=0x7f040015;
         /**  Label Strings 
          */
-        public static final int str_name=0x7f04000d;
-        public static final int str_search_hint=0x7f040015;
-        public static final int str_version=0x7f040013;
+        public static final int str_name=0x7f04000e;
+        public static final int str_search_hint=0x7f040016;
+        public static final int str_version=0x7f040014;
         /**   Title String  
          */
         public static final int title_lists=0x7f040001;
