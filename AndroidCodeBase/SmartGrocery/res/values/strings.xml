@@ -2,40 +2,50 @@
 <resources>
 
     <string name="app_name">SmartGrocery</string>
-    
-    <!--  Title String  -->
+
+    <!-- Title String -->
     <string name="title_lists">Lists</string>
     <string name="title_notifications">Notifications</string>
     <string name="title_reports">Reports</string>
     <string name="title_settings">Settings</string>
     <string name="title_nutrition_info">Nutrition Information</string>
-    
-    <!--  Dialog title strings -->
+
+    <!-- Dialog title strings -->
     <string name="dialog_add_list">Add List</string>
     <string name="dialog_rename_list">Rename List</string>
     <string name="dialog_duplicate_list">Duplicate List</string>
-    
-    <!--  Menu Strings -->
+
+    <!-- Menu Strings -->
     <string name="menu_add">Add</string>
     <string name="menu_duplicate">Duplicate</string>
     <string name="menu_delete">Delete</string>
     <string name="menu_share">Share</string>
     <string name="menu_rename">Rename</string>
-    
+
     <!-- Label Strings -->
     <string name="str_name">Name</string>
     <string name="str_color">Select Color</string>
-    
+
     <!-- Button Strings -->
     <string name="btn_add">Add</string>
     <string name="btn_cancel">Cancel</string>
-    
+
     <!-- Input hints -->
-	<string name="hint_name">Enter Name</string>
-	
-	<!-- Miscellaneous Strings -->
-	<string name="no_notifications">You don\'t have any notifications.</string>
-	<string name="str_version">V 0.0.1</string>
-	<string name="str_copyright">Copyright &#169; 2015\n All Rights Reserved.</string>
-	<string name="str_search_hint">Enter keyword and click on \"Search\" button to search from the nutrition database.</string>
+    <string name="hint_name">Enter Name</string>
+
+    <!-- Miscellaneous Strings -->
+    <string name="no_notifications">You don\'t have any notifications.</string>
+    <string name="str_version">V 0.0.1</string>
+    <string name="str_copyright">Copyright &#169; 2015\n All Rights Reserved.</string>
+    <string name="str_search_hint">Enter keyword and click on \"Search\" button to search from the nutrition database.</string>
+
+    <string-array name="arr_units">
+        <item>Kg</item>
+        <item>Gm</item>
+        <item>Lb</item>
+        <item>Pcs</item>
+        <item>M</item>
+        <item>CM</item>
+    </string-array>
+
 </resources>
