@@ -1,9 +1,8 @@
 package comp313.g2.smartgrocery.fragments;
 
 import java.util.ArrayList;
-import java.util.Date;
-
 import comp313.g2.smartgrocery.R;
+import comp313.g2.smartgrocery.TemplateActivity;
 import comp313.g2.smartgrocery.adapters.ListsAdapter;
 import comp313.g2.smartgrocery.helpers.GeneralHelpers;
 import comp313.g2.smartgrocery.helpers.PreferenceHelper;
@@ -15,6 +14,7 @@ import android.app.ActionBar;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -437,7 +437,10 @@ public class ListsFragment extends Fragment implements OnItemClickListener,
 			// code to show add item dialog
 			dialogAddList.show();
 			break;
-
+		case R.id.itemTemplates:
+			Intent i =new Intent(context, TemplateActivity.class);
+			startActivity(i);
+			break;
 		default:
 			break;
 		}
@@ -445,8 +448,14 @@ public class ListsFragment extends Fragment implements OnItemClickListener,
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-		Toast.makeText(context, list.get(arg2).Name, Toast.LENGTH_SHORT).show();
+	public void onItemClick(AdapterView<?> arg0, View arg1, int pos, long arg3) {
+		
+		// making notification as read
+		List listItem = list.get(pos);
+		
+		Intent i = new Intent(context, comp313.g2.smartgrocery.ListActivity.class);
+		i.putExtra("comp313.g2.smartgrocery.models.List", listItem);
+		startActivity(i);
 	}
 
 	@Override

@@ -48,6 +48,9 @@ namespace SmartGroceryApiLibrary
         [WebInvoke(UriTemplate = "templates/{templateId}", Method = "GET")]
         List<TemplateItem> GetTemplateItems(string templateId);
 
+        [OperationContract]
+        [WebInvoke(UriTemplate = "templatetolist/", Method = "POST", BodyStyle=WebMessageBodyStyle.WrappedRequest)]
+        string AddListFromTemplate(User user,string templateId);
         /* Methods related to Notification table */
 
         [OperationContract]
@@ -90,7 +93,7 @@ namespace SmartGroceryApiLibrary
         List<List> GetLists(User user);
 
         [OperationContract]
-        [WebInvoke(UriTemplate = "list/getLastModified", Method = "POST")]
+        [WebInvoke(UriTemplate = "list/getLastModified", Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest)]
         string GetLastModified(User user, string listId);
 
         [OperationContract]
@@ -132,8 +135,8 @@ namespace SmartGroceryApiLibrary
         string AddListItem(User user, ListItem listItem);
 
         [OperationContract]
-        [WebInvoke(UriTemplate = "listitems/add", Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest)]
-        bool UpdateListItem(User user, ListItem listItem);
+        [WebInvoke(UriTemplate = "listitems/update", Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest)]
+        bool UpdateListItem(User user, ListItem listItem, bool addToHistory);
 
         [OperationContract]
         [WebInvoke(UriTemplate = "listitems/delete", Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest)]

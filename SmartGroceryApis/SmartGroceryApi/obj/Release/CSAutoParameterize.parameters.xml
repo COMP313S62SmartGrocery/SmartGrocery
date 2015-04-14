@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <parameter name="SmartGroceryDb-Web.config Connection String" description="SmartGroceryDb Connection String used in web.config by the application to access the database." defaultValue="Data Source=.\;Initial Catalog=SmartGroceryDb;Integrated Security=True" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\Dipen\\Documents\\Visual\ Studio\ 2013\\Projects\\SmartGroceryApi\\SmartGroceryApi\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='SmartGroceryDb']/@connectionString" />
+  </parameter>
+</parameters>

@@ -53,10 +53,18 @@ namespace SmartGroceryApiLibrary.DataAccess
             SqlCommand cmd = new SqlCommand("insert into ListItems(NAME,QUANTITY,UNIT,LASTMODIFIED,REMINDER,LISTID) "
                                             + "values(@name,@quantity,@unit,@lastmodified,@reminder,@listid)", connection.con);
             cmd.Parameters.Add(new SqlParameter("@name", listItem.Name));
-            cmd.Parameters.Add(new SqlParameter("@quantity", listItem.Quantity));
-            cmd.Parameters.Add(new SqlParameter("@unit", listItem.Unit));
-            cmd.Parameters.Add(new SqlParameter("@lastmodified", listItem.LastModified));
-            cmd.Parameters.Add(new SqlParameter("@reminder", DateTime.Parse(listItem.Reminder).ToString(Constants.DATEFORMAT)));
+            cmd.Parameters.Add(new SqlParameter("@quantity", listItem.Quantity==null ? 0 : listItem.Quantity));
+            cmd.Parameters.Add(new SqlParameter("@unit", listItem.Unit == null ? "" : listItem.Unit));
+            cmd.Parameters.Add(new SqlParameter("@lastmodified", listItem.LastModified == null ? "" : listItem.LastModified));
+            if (string.IsNullOrEmpty(listItem.Reminder)) 
+            {
+                cmd.Parameters.Add(new SqlParameter("@reminder", ""));
+            }
+            else
+            {
+                cmd.Parameters.Add(new SqlParameter("@reminder", DateTime.Parse(listItem.Reminder).ToString(Constants.DATEFORMAT)));
+            }
+            
             cmd.Parameters.Add(new SqlParameter("@listid", listItem.ListId));
 
             long ret = -1;
@@ -67,8 +75,11 @@ namespace SmartGroceryApiLibrary.DataAccess
                 ret = long.Parse(cmd.ExecuteScalar().ToString());
             }
 
-            //updating list modified date
-            ListSet.ModifyNow(listItem.ListId, listItem.LastModified);
+            if (listItem.LastModified != null)
+            {
+                //updating list modified date
+                ListSet.ModifyNow(listItem.ListId, listItem.LastModified);
+            }
 
             connection.Close();
 

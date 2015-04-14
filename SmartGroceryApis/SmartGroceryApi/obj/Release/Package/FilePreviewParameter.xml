@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <parameter name="IIS Web Application Name" description="" value="Default Web Site/SmartGroceryApi" tags="IisApp">
+    <parameterEntry kind="ProviderPath" scope="IisApp" match="^C:\\Users\\Dipen\\Documents\\Visual\ Studio\ 2013\\Projects\\SmartGroceryApi\\SmartGroceryApi\\obj\\Release\\Package\\PackageTmp$" />
+    <parameterEntry kind="ProviderPath" scope="setAcl" match="^C:\\Users\\Dipen\\Documents\\Visual\ Studio\ 2013\\Projects\\SmartGroceryApi\\SmartGroceryApi\\obj\\Release\\Package\\PackageTmp$" />
+  </parameter>
+  <parameter name="SmartGroceryDb-Web.config Connection String" description="" value="Data Source=.\;Initial Catalog=SmartGroceryDb;Integrated Security=True" tags="">
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\Dipen\\Documents\\Visual\ Studio\ 2013\\Projects\\SmartGroceryApi\\SmartGroceryApi\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='SmartGroceryDb']/@connectionString" />
+  </parameter>
+</parameters>

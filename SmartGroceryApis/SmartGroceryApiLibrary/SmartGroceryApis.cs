@@ -232,6 +232,46 @@ namespace SmartGroceryApiLibrary
             }
             return false;
         }
+
+        public string AddListFromTemplate(User user, string templateId)
+        {
+            if (IsValidUser(user))
+            {
+                Template template = TemplateSet.GetTemplate(int.Parse(templateId));
+
+                while (ListSet.IsListExists(user, template.Name))
+                {
+                    template.Name = template.Name + "_copy";
+                }
+
+                List<TemplateItem> items = TemplateItemSet.GetTemplateItems(int.Parse(templateId));
+
+                List list = new List()
+                {
+                    Name = template.Name,
+                    Username = user.Username,
+                    Color = template.Color,
+                    LastModified = DateTime.Now.ToString(Constants.DATEFORMAT)
+                };
+                list.Id = ListSet.AddList(list);
+
+                foreach (TemplateItem item in items)
+                {
+                    ListItem listItem = new ListItem()
+                    {
+                        Name = item.Name,
+                        Quantity = item.Quantity,
+                        Unit = item.Unit,
+                        ListId = list.Id
+                    };
+
+                    ListItemSet.AddListItem(listItem);
+                }
+
+                return "List added successfully!";
+            }
+            return null;
+        }
         #endregion
 
         #region ListItem
@@ -262,11 +302,25 @@ namespace SmartGroceryApiLibrary
             return "-1";
         }
 
-        public bool UpdateListItem(User user, ListItem listItem)
+        public bool UpdateListItem(User user, ListItem listItem, bool addToHistory)
         {
             if (IsValidUser(user))
             {
-                return ListItemSet.UpdateListItem(listItem);
+                if (ListItemSet.UpdateListItem(listItem))
+                {
+                    if (addToHistory)
+                    {
+                        ItemHistorySet.AddItemHistory(new ItemHistory()
+                        {
+                            Name = listItem.Name,
+                            Quantity = listItem.Quantity,
+                            Unit = listItem.Unit,
+                            Date = DateTime.Now.ToShortDateString(),
+                            Username = user.Username
+                        });
+                    }
+                    return true;
+                }
             }
             return false;
         }

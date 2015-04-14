@@ -95,6 +95,7 @@ namespace SmartGroceryApiLibrary.DataAccess
                 {
                     Name = name,
                     Color = originalList.Color,
+                    LastModified = originalList.LastModified,
                     Username =  username
                 };
 
@@ -244,7 +245,7 @@ namespace SmartGroceryApiLibrary.DataAccess
                     list.Name = sdr["Name"].ToString();
                     list.Color = sdr["Color"].ToString();
                     list.LastModified = DateTime.Parse(sdr["LASTMODIFIED"].ToString()).ToString(Constants.DATEFORMAT);
-                    list.Username = username;
+                    list.Username = sdr["Username"].ToString();
 
                     lists.Add(list);
                 }
@@ -254,6 +255,23 @@ namespace SmartGroceryApiLibrary.DataAccess
             connection.Close();
 
             return lists;
+        }
+
+        internal static bool IsListExists(User user, string name)
+        {
+            ConnectionManager connection = new ConnectionManager();
+            connection.Open();
+
+            SqlCommand cmd = new SqlCommand("Select COUNT(*) from Lists where Name=@name AND Username=@username", connection.con);
+            cmd.Parameters.Add(new SqlParameter("@name", name));
+            cmd.Parameters.Add(new SqlParameter("@username", user.Username));
+
+            int ret = int.Parse(cmd.ExecuteScalar().ToString());
+
+            
+            connection.Close();
+
+            return ret>0;
         }
     }
 }

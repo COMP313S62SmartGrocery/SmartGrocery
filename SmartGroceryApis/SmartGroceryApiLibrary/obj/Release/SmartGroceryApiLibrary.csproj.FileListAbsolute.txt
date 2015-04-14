@@ -1,0 +1,5 @@
+C:\Users\Dipen\Documents\Visual Studio 2013\Projects\SmartGroceryApi\SmartGroceryApiLibrary\bin\Release\SmartGroceryApiLibrary.dll
+C:\Users\Dipen\Documents\Visual Studio 2013\Projects\SmartGroceryApi\SmartGroceryApiLibrary\bin\Release\SmartGroceryApiLibrary.pdb
+C:\Users\Dipen\Documents\Visual Studio 2013\Projects\SmartGroceryApi\SmartGroceryApiLibrary\obj\Release\SmartGroceryApiLibrary.dll
+C:\Users\Dipen\Documents\Visual Studio 2013\Projects\SmartGroceryApi\SmartGroceryApiLibrary\obj\Release\SmartGroceryApiLibrary.pdb
+C:\Users\Dipen\Documents\Visual Studio 2013\Projects\SmartGroceryApi\SmartGroceryApiLibrary\obj\Release\SmartGroceryApiLibrary.csprojResolveAssemblyReference.cache

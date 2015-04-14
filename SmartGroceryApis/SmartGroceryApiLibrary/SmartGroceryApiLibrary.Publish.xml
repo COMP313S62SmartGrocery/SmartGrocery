@@ -1,0 +1,6 @@
+<publishData>
+  <publishTarget publishUrl="http://localhost/">
+    <file relUrl="bin/SmartGroceryApiLibrary.dll" publishTime="04/10/2015 02:37:37" />
+    <file relUrl="bin/SmartGroceryApiLibrary.pdb" publishTime="04/10/2015 02:37:37" />
+  </publishTarget>
+</publishData>
