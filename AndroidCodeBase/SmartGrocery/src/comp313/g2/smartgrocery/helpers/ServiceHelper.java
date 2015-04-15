@@ -4,8 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.ParseException;
 import org.apache.http.client.ClientProtocolException;
@@ -144,7 +142,7 @@ public class ServiceHelper {
 				+"\"list\":{"
 						+ "\"Name\":\""+list.Name+"\","
 						+ "\"Color\":\""+list.Color+"\","
-						+ "\"LastModified\":\""+ GeneralHelpers.GetCurrentDate()+"\","
+						+ "\"LastModified\":\""+ GeneralHelpers.GetCurrentDateTime()+"\","
 						+ "\"Username\":\""+user.Username+"\""
 						+"},"
 				+"\"user\":{"
@@ -268,13 +266,13 @@ public class ServiceHelper {
 	public long AddListItem(comp313.g2.smartgrocery.models.ListItem listItem, User user) throws Exception{
 		String response = PostData(baseURL+"listitems/add",
 				"{"
-				+"\"list\":{"
+				+"\"listItem\":{"
 						+ "\"Name\":\""+listItem.Name+"\","
 						+ "\"Quantity\":\""+listItem.Quantity+"\","
 						+ "\"Reminder\":\""+listItem.Reminder+"\","
 						+ "\"Unit\":\""+listItem.Unit+"\","
 						+ "\"ListId\":\""+listItem.ListId+"\","
-						+ "\"LastModified\":\""+ GeneralHelpers.GetCurrentDate()+"\""
+						+ "\"LastModified\":\""+ GeneralHelpers.GetCurrentDateTime()+"\""
 						+"},"
 				+"\"user\":{"
 						+ "\"Username\":\""+user.Username+"\","
@@ -315,7 +313,7 @@ public class ServiceHelper {
 					 "\"SESS_KEY\":\""+ user.SESS_KEY + "\"" +
 					 "}, " +
 				"\"itemId\":\""+listItemId+"\","+
-				"\"time\":\""+GeneralHelpers.GetCurrentDate()+"\"}").replace("\"", "");
+				"\"time\":\""+GeneralHelpers.GetCurrentDateTime()+"\"}").replace("\"", "");
 		
 		if (!response.equals("")) {
 			return Boolean.parseBoolean(response);

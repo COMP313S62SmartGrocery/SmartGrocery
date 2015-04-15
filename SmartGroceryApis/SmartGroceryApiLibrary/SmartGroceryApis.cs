@@ -297,7 +297,7 @@ namespace SmartGroceryApiLibrary
         {
             if (IsValidUser(user))
             {
-                ListItemSet.AddListItem(listItem);
+                return ListItemSet.AddListItem(listItem).ToString();
             }
             return "-1";
         }

@@ -163,7 +163,7 @@ public class ListsFragment extends Fragment implements OnItemClickListener,
 					final List listItem = new List();
 					listItem.Name = listName;
 					listItem.Color = colorPicker.getSelectedColorString();
-					listItem.LastModified = GeneralHelpers.GetCurrentDate();
+					listItem.LastModified = GeneralHelpers.GetCurrentDateTime();
 
 					// performing pre add operations
 					btnAdd.setEnabled(false);

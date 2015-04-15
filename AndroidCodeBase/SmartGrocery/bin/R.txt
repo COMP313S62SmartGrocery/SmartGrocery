@@ -30,7 +30,6 @@ int id btnSignIn 0x7f0a000a
 int id btnSignUp 0x7f0a0010
 int id counter 0x7f0a002b
 int id cpListColor 0x7f0a0021
-int id dpReminder 0x7f0a0027
 int id drawer_layout 0x7f0a0015
 int id etConfirmPassword 0x7f0a000f
 int id etListName 0x7f0a0020
@@ -78,6 +77,7 @@ int id tvFrom 0x7f0a0019
 int id tvLoading 0x7f0a001d
 int id tvName 0x7f0a0035
 int id tvQuantity 0x7f0a0036
+int id tvReminder 0x7f0a0027
 int id tvSearchHint 0x7f0a002f
 int id tvSignIn 0x7f0a0011
 int id tvSignUp 0x7f0a000b

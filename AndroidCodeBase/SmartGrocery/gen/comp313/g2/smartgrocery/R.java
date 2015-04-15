@@ -63,7 +63,6 @@ public final class R {
         public static final int btnSignUp=0x7f0a0010;
         public static final int counter=0x7f0a002b;
         public static final int cpListColor=0x7f0a0021;
-        public static final int dpReminder=0x7f0a0027;
         public static final int drawer_layout=0x7f0a0015;
         public static final int etConfirmPassword=0x7f0a000f;
         public static final int etListName=0x7f0a0020;
@@ -111,6 +110,7 @@ public final class R {
         public static final int tvLoading=0x7f0a001d;
         public static final int tvName=0x7f0a0035;
         public static final int tvQuantity=0x7f0a0036;
+        public static final int tvReminder=0x7f0a0027;
         public static final int tvSearchHint=0x7f0a002f;
         public static final int tvSignIn=0x7f0a0011;
         public static final int tvSignUp=0x7f0a000b;

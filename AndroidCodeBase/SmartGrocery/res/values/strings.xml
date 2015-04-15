@@ -44,8 +44,10 @@
         <item>Gm</item>
         <item>Lb</item>
         <item>Pcs</item>
+        <item>Lt</item>
+        <item>Ml</item>
         <item>M</item>
-        <item>CM</item>
+        <item>Cm</item>
     </string-array>
 
 </resources>

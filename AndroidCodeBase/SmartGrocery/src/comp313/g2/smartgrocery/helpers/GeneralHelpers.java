@@ -20,9 +20,14 @@ public class GeneralHelpers {
 	
 
 	
-	public static String GetCurrentDate() {
+	public static String GetCurrentDateTime() {
 		String val = String.valueOf(calender.get(Calendar.DAY_OF_MONTH))+"-"+String.valueOf(calender.get(Calendar.MONTH)+1)+"-"+String.valueOf(calender.get(Calendar.YEAR));
 		val+=" "+String.valueOf(calender.get(Calendar.HOUR_OF_DAY))+":"+String.valueOf(calender.get(Calendar.MINUTE))+":"+String.valueOf(calender.get(Calendar.SECOND));
+		return val;
+	}
+	
+	public static String GetCurrentDate() {
+		String val = String.valueOf(calender.get(Calendar.DAY_OF_MONTH))+"-"+String.valueOf(calender.get(Calendar.MONTH)+1)+"-"+String.valueOf(calender.get(Calendar.YEAR));
 		return val;
 	}
 }

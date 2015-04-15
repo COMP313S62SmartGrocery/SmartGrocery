@@ -55,14 +55,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/pad10"
-        android:text="Reminder"
+        android:id="@+id/tvReminder"
+        android:textColor="#00F"
+        android:text="Click here to set Reminder"
         android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <DatePicker
-        android:id="@+id/dpReminder"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/pad10" />
     
 
     <View

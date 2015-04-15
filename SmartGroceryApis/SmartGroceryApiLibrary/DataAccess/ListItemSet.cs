@@ -58,7 +58,7 @@ namespace SmartGroceryApiLibrary.DataAccess
             cmd.Parameters.Add(new SqlParameter("@lastmodified", listItem.LastModified == null ? "" : listItem.LastModified));
             if (string.IsNullOrEmpty(listItem.Reminder)) 
             {
-                cmd.Parameters.Add(new SqlParameter("@reminder", ""));
+                cmd.Parameters.Add(new SqlParameter("@reminder", "NULL"));
             }
             else
             {
@@ -92,9 +92,7 @@ namespace SmartGroceryApiLibrary.DataAccess
             connection.Open();
 
             SqlCommand cmd = new SqlCommand("SELECT LISTID FROM LISTITEMS WHERE ID=@id", connection.con);
-            cmd.Parameters.Add(new SqlParameter("@listid", listItemId));
-
-            SqlDataReader sdr = cmd.ExecuteReader();
+            cmd.Parameters.Add(new SqlParameter("@id", listItemId));
 
             long ret = long.Parse(cmd.ExecuteScalar().ToString());
 
@@ -132,13 +130,15 @@ namespace SmartGroceryApiLibrary.DataAccess
             ConnectionManager connection = new ConnectionManager();
             connection.Open();
 
+            long listId = GetListId(itemId);
+
             SqlCommand cmd = new SqlCommand("delete from LISTITEMS where ID=@id", connection.con);
             cmd.Parameters.Add(new SqlParameter("@id", itemId));
 
             bool ret = cmd.ExecuteNonQuery() > 0;
 
             //updating list modified date
-            ListSet.ModifyNow(GetListId(itemId), time);
+            ListSet.ModifyNow(listId, time);
 
             connection.Close();
 

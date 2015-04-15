@@ -1,6 +1,7 @@
 package comp313.g2.smartgrocery;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import comp313.g2.smartgrocery.adapters.ListItemsAdapter;
 import comp313.g2.smartgrocery.helpers.GeneralHelpers;
@@ -11,25 +12,34 @@ import comp313.g2.smartgrocery.models.ListItem;
 import comp313.g2.smartgrocery.models.User;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.ContextMenu;
+import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
-public class ListActivity extends Activity implements OnItemClickListener {
+public class ListActivity extends Activity implements OnItemClickListener, OnClickListener {
 	private SharedPreferences prefs;
 	private List list;
 	private User user;
@@ -42,6 +52,17 @@ public class ListActivity extends Activity implements OnItemClickListener {
 	private ServiceHelper helper;
 	
 	private int selectedItemPosition = -1;
+	
+	private Dialog dialogAddItem, dialogUpdateItem;
+	
+	private EditText etItemName, etUpdateItemName;
+	private EditText etItemQuantity, etUpdateItemQuantity;
+	private Spinner spUnit, spUpdateUnit;
+	private TextView tvReminder, tvUpdateReminder;
+	private Button btnAdd, btnUpdate, btnCancel, btnUpdateCancel;
+	
+	private static final Calendar calender= Calendar.getInstance();
+	private static final int DATE_PICKER_DIALOG = 999;	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -69,12 +90,48 @@ public class ListActivity extends Activity implements OnItemClickListener {
 		lvListItems.setEmptyView(emptyView);
 		
 		helper = new ServiceHelper();
+		
+		//initializing dialogs
+		dialogAddItem = new Dialog(this);
+		dialogAddItem.setTitle("Add Item");
+		dialogAddItem.setCancelable(false);
+		dialogAddItem.setContentView(R.layout.dialog_add_list_item);
+		
+		dialogUpdateItem = new Dialog(this);
+		dialogUpdateItem.setTitle("Update Item");
+		dialogUpdateItem.setCancelable(false);
+		dialogUpdateItem.setContentView(R.layout.dialog_add_list_item);
+		
+		etItemName = (EditText) dialogAddItem.findViewById(R.id.etName);
+		etItemQuantity = (EditText) dialogAddItem.findViewById(R.id.etQuantity);
+		spUnit = (Spinner) dialogAddItem.findViewById(R.id.spUnit);
+		tvReminder = (TextView) dialogAddItem.findViewById(R.id.tvReminder);
+		tvReminder.setOnClickListener(this);
+		
+		btnAdd = (Button) dialogAddItem.findViewById(R.id.btnAdd);
+		btnAdd.setOnClickListener(this);
+		btnCancel = (Button) dialogAddItem.findViewById(R.id.btnCancel);
+		btnCancel.setOnClickListener(this);
+		
+		etUpdateItemName = (EditText) dialogUpdateItem.findViewById(R.id.etName);
+		etUpdateItemName.setEnabled(false);
+		etUpdateItemQuantity = (EditText) dialogUpdateItem.findViewById(R.id.etQuantity);
+		spUpdateUnit = (Spinner) dialogUpdateItem.findViewById(R.id.spUnit);
+		spUpdateUnit.setEnabled(false);
+		tvUpdateReminder = (TextView) dialogUpdateItem.findViewById(R.id.tvReminder);
+		tvUpdateReminder.setOnClickListener(this);
+
+		btnUpdate = (Button) dialogUpdateItem.findViewById(R.id.btnAdd);
+		btnUpdate.setText("Update");
+		btnUpdate.setOnClickListener(this);
+		btnUpdateCancel = (Button) dialogUpdateItem.findViewById(R.id.btnCancel);
+		btnUpdateCancel.setOnClickListener(this);
 	}
 	
 	@Override
 	protected void onResume() {
 		super.onResume();
-		
+				
 		//updating title of the activity
 		setTitle(list.Name);
 		
@@ -104,6 +161,7 @@ public class ListActivity extends Activity implements OnItemClickListener {
 									ListItemsAdapter adapter =new ListItemsAdapter(getApplicationContext(), listItems);
 									lvListItems.setAdapter(adapter);
 									lvListItems.setOnItemClickListener(ListActivity.this);
+									lvListItems.setOnCreateContextMenuListener(ListActivity.this);
 								}								
 							}
 						});
@@ -132,6 +190,12 @@ public class ListActivity extends Activity implements OnItemClickListener {
 	}
 	
 	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.menu_itemlist, menu);
+		return true;
+	}
+	
+	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenuInfo menuInfo) {
 		selectedItemPosition = ((AdapterContextMenuInfo)menuInfo).position;
@@ -141,7 +205,7 @@ public class ListActivity extends Activity implements OnItemClickListener {
 	}
 	
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
+	public boolean onContextItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.itemDelete:
 			if(selectedItemPosition!=-1){
@@ -189,6 +253,190 @@ public class ListActivity extends Activity implements OnItemClickListener {
 		default:
 			break;
 		}
+		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			onBackPressed();
+			break;
+		case R.id.itemAdd:
+			dialogAddItem.show();
+			break;
+		default:
+			break;
+		}
 		return super.onOptionsItemSelected(item);
 	}
+
+	@Override
+	public void onClick(View view) {
+		if(view == btnCancel){
+			dialogAddItem.dismiss();
+			
+			etItemName.setText("");
+			etItemName.setError(null);
+			etItemQuantity.setText("");
+			etItemQuantity.setError(null);
+		}else if(view == btnUpdateCancel){
+			dialogUpdateItem.dismiss();
+
+			etUpdateItemName.setText("");
+			etUpdateItemName.setError(null);
+			etUpdateItemQuantity.setText("");
+			etUpdateItemQuantity.setError(null);
+		}
+		else if(view == btnAdd){
+			final String name = etItemName.getText().toString().trim();
+			final String quantity = etItemQuantity.getText().toString().trim();
+			final String unit = spUnit.getSelectedItem().toString().trim();
+			String reminderText = tvReminder.getText().toString().trim();
+			final String reminder;
+			
+			if(reminderText.startsWith("Click") && reminderText.length()>11){
+				reminder ="";
+			}else{
+				if(IsValidFutureDate(reminderText)){
+					reminder = reminderText;
+				}else{
+					return;
+				}				
+			}
+			
+			
+			if(name==null || name.length()<=0){
+				etItemName.setError("Name is required!");
+			}else if(quantity==null || quantity.length()<=0){
+				etItemQuantity.setError("Quantity id required!");
+			}else{
+				if(GeneralHelpers.IsConnected(getApplicationContext())){
+					new Thread(new Runnable() {
+						
+						@Override
+						public void run() {
+							try{
+								final ListItem item = new ListItem();
+								item.Name = name;
+								item.Quantity =Float.parseFloat(quantity);
+								item.Unit = unit;
+								item.Reminder = reminder;
+								item.ListId = list.Id;
+								
+								final long id = helper.AddListItem(item, user);
+								
+									runOnUiThread(new Runnable() {
+									
+									@Override
+									public void run() {
+
+										if(id !=-1){
+											item.Id = id;
+											
+											listItems.add(item);
+											((BaseAdapter) lvListItems.getAdapter()).notifyDataSetChanged();
+										}else{
+											Toast.makeText(getApplicationContext(),"Unable to add item!", Toast.LENGTH_SHORT).show();
+										}
+										
+										etItemName.setText("");
+										etItemName.setError(null);
+										etItemQuantity.setText("");
+										etItemQuantity.setError(null);
+										dialogAddItem.dismiss();
+									}
+								});
+							}catch (final Exception e) {
+								runOnUiThread(new Runnable() {
+									
+									@Override
+									public void run() {
+										Toast.makeText(getApplicationContext(),e.getMessage(), Toast.LENGTH_SHORT).show();
+										dialogAddItem.dismiss();
+									}
+								});
+							}
+						}
+					}).start();
+				}else{
+					Toast.makeText(getApplicationContext(), "Unable to connect!", Toast.LENGTH_SHORT).show();
+				}
+			}
+		}
+		else if(view == btnUpdate){
+			final String quantity = etUpdateItemQuantity.getText().toString().trim();
+			String reminder = null;
+			
+			if(quantity==null || quantity.length()<=0){
+				etItemQuantity.setError("Quantity id required!");	
+			}
+			
+			if(tvUpdateReminder.getText().toString().startsWith("Click") && tvUpdateReminder.getText().length()>11){
+				reminder="";
+			}else{
+				if(IsValidFutureDate(tvUpdateReminder.getText().toString())){
+					reminder = tvUpdateReminder.getText().toString().trim();
+				}
+			}
+			
+			if(null!=reminder){
+				if(GeneralHelpers.IsConnected(getApplicationContext())){
+					
+				}else{
+					Toast.makeText(getApplicationContext(), "Unable to connect!", Toast.LENGTH_SHORT).show();
+				}
+			}
+		}else if(view == tvReminder || view ==tvUpdateReminder){
+			showDialog(DATE_PICKER_DIALOG);
+		}
+	}
+	
+
+	private boolean IsValidFutureDate(String date) {
+		String[] reminderData = date.split("-");
+		int day = Integer.parseInt(reminderData[0]);
+		int month =  Integer.parseInt(reminderData[1]);
+		int year =  Integer.parseInt(reminderData[2]);
+		
+		if(year<calender.get(Calendar.YEAR)){
+			Toast.makeText(getApplicationContext(), "Invalid date!", Toast.LENGTH_SHORT).show();
+			return false;
+		}else if(year==calender.get(Calendar.YEAR) && month < calender.get(Calendar.MONTH)+1){
+			Toast.makeText(getApplicationContext(), "Invalid date!", Toast.LENGTH_SHORT).show();
+			return false;
+		}else if(year==calender.get(Calendar.YEAR) && month == calender.get(Calendar.MONTH)+1 &&  day < calender.get(Calendar.DATE)){
+			Toast.makeText(getApplicationContext(), "Invalid date!", Toast.LENGTH_SHORT).show();
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	protected Dialog onCreateDialog(int id) {
+
+		switch (id) {
+		case DATE_PICKER_DIALOG:
+		   // set date picker as current date
+		   return new DatePickerDialog(this, datePickerListener, 
+				   		calender.get(Calendar.YEAR), calender.get(Calendar.MONTH),calender.get(Calendar.DAY_OF_MONTH));
+		}
+		return null;
+	}
+
+	private DatePickerDialog.OnDateSetListener datePickerListener = new DatePickerDialog.OnDateSetListener() {
+
+		// when dialog box is closed, below method will be called.
+		public void onDateSet(DatePicker view, int selectedYear,int selectedMonth, int selectedDay) {
+			// set selected date into Text View
+			if(dialogAddItem.isShowing()){
+			
+				tvReminder.setText(new StringBuilder().append(selectedDay).append("-").append(selectedMonth + 1)
+					   .append("-").append(selectedYear));
+			}else{
+				tvUpdateReminder.setText(new StringBuilder().append(selectedDay).append("-").append(selectedMonth + 1)
+						   .append("-").append(selectedYear));
+			}
+		}
+	};
 }
