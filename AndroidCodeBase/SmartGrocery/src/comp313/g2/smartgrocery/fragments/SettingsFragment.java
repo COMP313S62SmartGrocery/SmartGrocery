@@ -47,15 +47,7 @@ public class SettingsFragment extends Fragment implements
 	@Override
 	public void onResume() {
 		super.onResume();
-		// loading default values
-		boolean enableNotification = prefs.getBoolean(KEY_NOTIFICATION, true);
-		switchNotification.setChecked(enableNotification);
-
-		boolean enableNotificationSound = prefs.getBoolean(
-				KEY_NOTIFICATION_SOUND, true);
-
-		switchNotificationSound.setChecked(enableNotificationSound);
-
+		
 		// enabling options menu
 		setHasOptionsMenu(false);
 
@@ -79,6 +71,15 @@ public class SettingsFragment extends Fragment implements
 			switchNotificationSound = (Switch) getActivity().findViewById(
 					R.id.switchNotificationSound);
 
+			// loading default values
+			boolean enableNotification = prefs.getBoolean(KEY_NOTIFICATION, true);
+			switchNotification.setChecked(enableNotification);
+
+			boolean enableNotificationSound = prefs.getBoolean(
+					KEY_NOTIFICATION_SOUND, true);
+
+			switchNotificationSound.setChecked(enableNotificationSound);
+			
 			switchNotification.setOnCheckedChangeListener(this);
 			switchNotificationSound.setOnCheckedChangeListener(this);
 

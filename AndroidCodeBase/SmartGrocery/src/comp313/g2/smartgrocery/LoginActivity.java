@@ -188,9 +188,12 @@ public class LoginActivity extends Activity implements OnClickListener {
 			final String password = etPassword.getText().toString().trim();
 
 			if (username.length() <= 0) {
-				etUsername.setError("Enter Username");
-			} else if (password.length() <= 0) {
-				etPassword.setError("Enter Password");
+				etUsername.setError("Enter Username!");
+			}else if(!GeneralHelpers.IsValidEmailId(username)){
+				etUsername.setError("Invalid Email Id!");
+			}
+			else if (password.length() <= 0) {
+				etPassword.setError("Enter Password!");
 			} else {
 				// signing in
 				performSignIn(username, password);
@@ -206,10 +209,13 @@ public class LoginActivity extends Activity implements OnClickListener {
 
 			if (username.length() <= 0) {
 				etSignUpUsername.setError("Enter Username");
-			} else if (password.length() <= 0) {
-				etSignUpPassword.setError("Enter Password");
+			}else if(!GeneralHelpers.IsValidEmailId(username)){
+				etSignUpUsername.setError("Invalid Email Id!");
+			}
+			else if (password.length() <= 0) {
+				etSignUpPassword.setError("Enter Password!");
 			} else if (!password.equals(confirmPassword)) {
-				etConfirmPassword.setError("Password do not match");
+				etConfirmPassword.setError("Password do not match!");
 			} else {
 				performSignUp(username, password);
 			}

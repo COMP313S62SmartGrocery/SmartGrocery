@@ -135,7 +135,7 @@ public class NotificationsFragment extends Fragment implements
 							}
 						});
 					} catch (Exception e) {
-						Log.e("Smart Grocery", e.getMessage());
+						//Log.e("Smart Grocery", e.getMessage());
 					}
 				}
 			}).start();

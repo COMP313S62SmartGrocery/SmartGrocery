@@ -44,6 +44,11 @@ public class ServiceHelper {
 	}
 
 	public String AuthenticateUser(String authKey) throws Exception {
+		if(!authKey.startsWith("\""))
+			authKey = "\""+authKey;
+		if(!authKey.endsWith("\""))
+			authKey = authKey+"\"";
+		
 		return PostData(baseURL + "user/Authenticate", authKey)
 				.replace("\"", "");
 	}
@@ -175,7 +180,39 @@ public class ServiceHelper {
 		return false;
 	}
 	
-	/* Share Unshare remaining */
+	public boolean ShareList(User user, long listId, String withUsername) throws Exception {
+		String response = PostData(
+				baseURL + "list/share",
+				"{" +
+				"\"user\":{" +
+					"\"Username\":\"" + user.Username + "\"," +
+					 "\"SESS_KEY\":\""+ user.SESS_KEY + "\"" +
+					 "}, " +
+				"\"listId\":\""+listId+"\","+
+				"\"withUsername\":\""+withUsername+"\"}").replace("\"", "");
+		
+		if (!response.equals("")) {
+			return Boolean.parseBoolean(response);
+		}
+		return false;
+	}
+	
+	public boolean UnshareList(User user, long listId, String withUsername) throws Exception {
+		String response = PostData(
+				baseURL + "list/unshare",
+				"{" +
+				"\"user\":{" +
+					"\"Username\":\"" + user.Username + "\"," +
+					 "\"SESS_KEY\":\""+ user.SESS_KEY + "\"" +
+					 "}, " +
+				"\"listId\":\""+listId+"\","+
+				"\"withUsername\":\""+withUsername+"\"}").replace("\"", "");
+		
+		if (!response.equals("")) {
+			return Boolean.parseBoolean(response);
+		}
+		return false;
+	}
 	
 	public comp313.g2.smartgrocery.models.List DuplicateList(User user, long listId, String newListName) throws Exception {
 		

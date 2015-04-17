@@ -15,10 +15,13 @@ import android.widget.TextView;
 public class ListItemsAdapter extends BaseAdapter {
 	private Context context;
 	private ArrayList<ListItem> items;
+	private String currentDate, currentLocalDate;
 
 	public ListItemsAdapter(Context context, ArrayList<ListItem> listItems) {
 		this.context = context;
 		items = listItems;
+		currentDate = GeneralHelpers.GetCurrentDate();
+		currentLocalDate = GeneralHelpers.GetCurrentLocalDate();
 	}
 
 	@Override
@@ -50,7 +53,8 @@ public class ListItemsAdapter extends BaseAdapter {
 		tvName.setText(item.Name);
 		tvQuantity.setText(String.valueOf(item.Quantity) + item.Unit);
 
-		if (item.Reminder.equals(GeneralHelpers.GetCurrentDate())) {
+		
+		if (item.Reminder.equals(currentDate) || item.Reminder.equals(currentLocalDate)) {
 			view.setBackgroundColor(Color.GRAY);
 		}
 

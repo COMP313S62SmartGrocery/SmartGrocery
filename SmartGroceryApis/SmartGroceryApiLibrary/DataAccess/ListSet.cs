@@ -122,7 +122,7 @@ namespace SmartGroceryApiLibrary.DataAccess
         }
 
 
-        public static bool ShareList(long listId, string withUsername)
+        public static bool ShareList(long listId, string withUsername, User user)
         {
             if (UserSet.IsExists(withUsername))
             {
@@ -134,6 +134,15 @@ namespace SmartGroceryApiLibrary.DataAccess
                 cmd.Parameters.Add(new SqlParameter("@newUser", "," + withUsername));
 
                 bool ret = cmd.ExecuteNonQuery() > 0;
+
+                NotificationSet.AddNotification(new Notification()
+                {
+                    Username = withUsername,
+                    From = user.Username,
+                    Text = user.Username+" shared his list with you. You will be able to see list in you lists.\n\nUse share option in Lists to share list with your friends and family!\n\nHave a nice day!",
+                    Subject= user.Username+" shared list with you",
+                    Date = DateTime.Now.ToString(Constants.DATEFORMAT)
+                });
 
                 connection.Close();
 

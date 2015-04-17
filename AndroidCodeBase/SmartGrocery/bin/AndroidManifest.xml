@@ -38,6 +38,7 @@
         <activity android:name="comp313.g2.smartgrocery.TemplateActivity"></activity>
         <activity android:name="comp313.g2.smartgrocery.TemplateItemsActivity"></activity>
         <activity android:name="comp313.g2.smartgrocery.ReportActivity"></activity>
+        <activity android:name="comp313.g2.smartgrocery.SharingActivity"></activity>
         
         <service android:name="comp313.g2.smartgrocery.services.ReminderService"></service>
         

@@ -32,6 +32,15 @@ namespace SmartGroceryApiLibrary.DataAccess
                     ret = uuid;
                 }
 
+                NotificationSet.AddNotification(new Notification()
+                {
+                    Date = DateTime.Now.ToString(Constants.DATEFORMAT),
+                    From = "SmartGrocery Team",
+                    Username = username,
+                    Text = "Welcome to SmartGrocery, smart way to manage you groceries!",
+                    Subject = "Welcome to SmartGrocery"
+                });
+
                 connection.Close();
             }
             catch(Exception ex){

@@ -2,6 +2,7 @@ package comp313.g2.smartgrocery.fragments;
 
 import java.util.ArrayList;
 import comp313.g2.smartgrocery.R;
+import comp313.g2.smartgrocery.SharingActivity;
 import comp313.g2.smartgrocery.TemplateActivity;
 import comp313.g2.smartgrocery.adapters.ListsAdapter;
 import comp313.g2.smartgrocery.helpers.GeneralHelpers;
@@ -164,6 +165,7 @@ public class ListsFragment extends Fragment implements OnItemClickListener,
 					listItem.Name = listName;
 					listItem.Color = colorPicker.getSelectedColorString();
 					listItem.LastModified = GeneralHelpers.GetCurrentDateTime();
+					listItem.Username=user.Username;
 
 					// performing pre add operations
 					btnAdd.setEnabled(false);
@@ -494,10 +496,10 @@ public class ListsFragment extends Fragment implements OnItemClickListener,
 						try {
 							final boolean isDeleted;
 							if(!listItem.Username.startsWith(user.Username)){
-									isDeleted = true;//invoke un-share method 
+									isDeleted = helper.UnshareList(user, listItem.Id, user.Username);//invoke un-share method 
 							}else{
 							
-							isDeleted = helper.DeleteList(user,
+								isDeleted = helper.DeleteList(user,
 									listItem.Id);
 							}
 							getActivity().runOnUiThread(new Runnable() {
@@ -539,10 +541,17 @@ public class ListsFragment extends Fragment implements OnItemClickListener,
 			case R.id.itemDuplicate:
 				dialogDuplicateList.show();
 				break;
+			case R.id.itemShare:
+				if(selectedItemPosition!=-1){
+					Intent i = new Intent(getActivity(), SharingActivity.class);
+					i.putExtra("comp313.g2.smartgrocery.models.List", list.get(selectedItemPosition));
+					startActivity(i);
+				}
+				break;
 			default:
 				break;
 			}
-			Toast.makeText(context, item.getTitle(), Toast.LENGTH_SHORT).show();
+			//Toast.makeText(context, item.getTitle(), Toast.LENGTH_SHORT).show();
 		}
 		return super.onContextItemSelected(item);
 	}

@@ -6,6 +6,7 @@ import comp313.g2.smartgrocery.fragments.NotificationsFragment;
 import comp313.g2.smartgrocery.fragments.NutritionInfoFragment;
 import comp313.g2.smartgrocery.fragments.ReportsFragment;
 import comp313.g2.smartgrocery.fragments.SettingsFragment;
+import comp313.g2.smartgrocery.helpers.PreferenceHelper;
 import comp313.g2.smartgrocery.models.NavDrawerItem;
 import comp313.g2.smartgrocery.services.ReminderService;
 
@@ -186,7 +187,8 @@ public class MainActivity extends Activity {
         	break;
         case 5:
         	Editor editor = prefs.edit();
-        	editor.clear();
+        	editor.remove(PreferenceHelper.KEY_USERNAME);
+        	editor.remove(PreferenceHelper.KEY_SESS);
         	editor.commit();
         	
         	//starting login activity

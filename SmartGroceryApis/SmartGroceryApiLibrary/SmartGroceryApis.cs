@@ -210,7 +210,7 @@ namespace SmartGroceryApiLibrary
         {
             if (IsValidUser(user))
             {
-                return ListSet.ShareList(listId, withUsername);
+                return ListSet.ShareList(listId, withUsername, user);
             }
             return false;
         }
