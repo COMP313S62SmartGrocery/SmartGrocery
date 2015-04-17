@@ -80,8 +80,12 @@ namespace SmartGroceryApiLibrary
         List<string> GetItems(User user);
 
         [OperationContract]
+        [WebInvoke(UriTemplate = "history/getYears", Method = "POST",BodyStyle=WebMessageBodyStyle.WrappedRequest)]
+        List<string> GetYears(User user, string itemName);
+
+        [OperationContract]
         [WebInvoke(UriTemplate = "history/get", Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest)]
-        List<ItemHistory> GetItemHistory(User user, string itemName);
+        List<ItemHistory> GetItemHistory(User user, string itemName, string month, string year);
 
         [OperationContract]
         [WebInvoke(UriTemplate = "history/clear", Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest)]
@@ -141,5 +145,9 @@ namespace SmartGroceryApiLibrary
         [OperationContract]
         [WebInvoke(UriTemplate = "listitems/delete", Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest)]
         bool DeleteListItem(User user, string itemId, string time);
+
+        [OperationContract]
+        [WebInvoke(UriTemplate = "reminders/getCount", Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest)]
+        int GetReminderCount(string username, string date);
     }
 }

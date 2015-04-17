@@ -7,6 +7,7 @@ import comp313.g2.smartgrocery.fragments.NutritionInfoFragment;
 import comp313.g2.smartgrocery.fragments.ReportsFragment;
 import comp313.g2.smartgrocery.fragments.SettingsFragment;
 import comp313.g2.smartgrocery.models.NavDrawerItem;
+import comp313.g2.smartgrocery.services.ReminderService;
 
 import android.app.Activity;
 
@@ -116,6 +117,8 @@ public class MainActivity extends Activity {
             // on first time display view for first nav item
             displayView(0);
         }
+        
+        startService(new Intent(MainActivity.this, ReminderService.class));
     }
  
     /**

@@ -51,6 +51,7 @@ public final class R {
         public static final int list_item_bg_normal=0x7f020007;
         public static final int list_item_bg_pressed=0x7f020008;
         public static final int list_selector=0x7f020009;
+        public static final int notification=0x7f02000a;
     }
     public static final class id {
         public static final int btnAbout=0x7f0a0038;

@@ -1,6 +1,8 @@
 package comp313.g2.smartgrocery.helpers;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -27,7 +29,8 @@ public class GeneralHelpers {
 	}
 	
 	public static String GetCurrentDate() {
-		String val = String.valueOf(calender.get(Calendar.DAY_OF_MONTH))+"-"+String.valueOf(calender.get(Calendar.MONTH)+1)+"-"+String.valueOf(calender.get(Calendar.YEAR));
-		return val;
+		SimpleDateFormat sdfDate = new SimpleDateFormat("dd-MM-yyyy");//dd/MM/yyyy
+	    Date now = new Date();
+	    return sdfDate.format(now);
 	}
 }

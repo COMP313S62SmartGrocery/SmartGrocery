@@ -140,11 +140,20 @@ namespace SmartGroceryApiLibrary
             return null;
         }
 
-        public List<ItemHistory> GetItemHistory(User user, string itemName)
+        public List<string> GetYears(User user, string itemName)
         {
             if (IsValidUser(user))
             {
-                return ItemHistorySet.GetItemHistory(itemName, user.Username);
+                return ItemHistorySet.GetItemHistoryYears(user, itemName);
+            }
+            return null;
+        }
+
+        public List<ItemHistory> GetItemHistory(User user, string itemName, string month, string year)
+        {
+            if (IsValidUser(user))
+            {
+                return ItemHistorySet.GetItemHistory(itemName, user.Username, month, year);
             }
             return null;
         }
@@ -302,25 +311,32 @@ namespace SmartGroceryApiLibrary
             return "-1";
         }
 
+        public int GetReminderCount(string username, string date)
+        {
+            return ListItemSet.GetReminderCount(username, date);
+        }
+
         public bool UpdateListItem(User user, ListItem listItem, bool addToHistory)
         {
             if (IsValidUser(user))
             {
-                if (ListItemSet.UpdateListItem(listItem))
+                if (addToHistory)
                 {
-                    if (addToHistory)
+                    ListItem item = ListItemSet.GetListItem(listItem.Id);
+                    if (item != null)
                     {
                         ItemHistorySet.AddItemHistory(new ItemHistory()
                         {
-                            Name = listItem.Name,
-                            Quantity = listItem.Quantity,
-                            Unit = listItem.Unit,
+                            Name = item.Name,
+                            Quantity = item.Quantity,
+                            Unit = item.Unit,
                             Date = DateTime.Now.ToShortDateString(),
                             Username = user.Username
                         });
                     }
-                    return true;
                 }
+
+                return ListItemSet.UpdateListItem(listItem);
             }
             return false;
         }

@@ -535,4 +535,15 @@ public class ServiceHelper {
 			throw e;
 		}
 	}
+
+	public int getReminderCount(String username, String date) throws Exception {
+		String responce = PostData(baseURL+"reminders/getCount",
+				"{" +
+				"\"username\":\""+username+"\"," +
+				"\"date\":\""+date+"\"}");
+		if(!responce.equals("")){
+			return Integer.parseInt(responce);
+		}
+		return 0;
+	}
 }

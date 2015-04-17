@@ -30,14 +30,24 @@ namespace SmartGroceryApiLibrary.DataAccess
             return ret;
         }
 
-        public static List<ItemHistory> GetItemHistory(string itemName, string username)
+        public static List<ItemHistory> GetItemHistory(string itemName, string username,string month, string year)
         {
             ConnectionManager connection = new ConnectionManager();
             connection.Open();
 
             List<ItemHistory> history = new List<ItemHistory>();
 
-            SqlCommand cmd = new SqlCommand("SELECT * FROM ITEMHISTORY WHERE NAME=@name AND USERNAME=@username ORDER BY ID", connection.con);
+            SqlCommand cmd;
+            if (string.IsNullOrEmpty(month) || string.IsNullOrEmpty(year))
+            {
+                cmd =new SqlCommand("SELECT * FROM ITEMHISTORY WHERE NAME=@name AND USERNAME=@username ORDER BY ID", connection.con);
+            }
+            else
+            {
+                cmd = new SqlCommand("SELECT Id,Name,Quantity,Unit,FORMAT(CONVERT(DATE,DATE,103),'dd-MM-yyyy') as [Date] FROM ItemHistory WHERE NAME=@name AND USERNAME=@username AND MONTH(CONVERT(DATE,[Date],103))=@month AND YEAR(CONVERT(DATE,[DATE],103))=@year", connection.con);
+                cmd.Parameters.Add(new SqlParameter("@month", month));
+                cmd.Parameters.Add(new SqlParameter("@year", year));
+            }
             cmd.Parameters.Add(new SqlParameter("@name", itemName));
             cmd.Parameters.Add(new SqlParameter("@username", username));
 
@@ -100,6 +110,32 @@ namespace SmartGroceryApiLibrary.DataAccess
 
             SqlCommand cmd = new SqlCommand("SELECT DISTINCT NAME FROM ITEMHISTORY WHERE USERNAME=@username", connection.con);
             cmd.Parameters.Add(new SqlParameter("@username", username));
+
+            SqlDataReader sdr = cmd.ExecuteReader();
+
+            if (sdr.HasRows)
+            {
+                while (sdr.Read())
+                {
+                    list.Add(sdr[0].ToString());
+                }
+            }
+
+            connection.Close();
+
+            return list;
+        }
+
+        internal static List<string> GetItemHistoryYears(User user, string itemName)
+        {
+            ConnectionManager connection = new ConnectionManager();
+            connection.Open();
+
+            List<string> list = new List<string>();
+
+            SqlCommand cmd = new SqlCommand("SELECT DISTINCT YEAR(CONVERT(DATE,[Date],103)) FROM ItemHistory WHERE NAME=@name AND [USERNAME]=@username", connection.con);
+            cmd.Parameters.Add(new SqlParameter("@username", user.Username));
+            cmd.Parameters.Add(new SqlParameter("@name", itemName));
 
             SqlDataReader sdr = cmd.ExecuteReader();
 
