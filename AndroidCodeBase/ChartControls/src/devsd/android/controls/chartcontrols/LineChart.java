@@ -39,13 +39,14 @@ public class LineChart extends View {
 	//labels
 	private String xAxisLabel="";
 	private String yAxisLabel="";
+	private String emptyDataMessage="Data is not available!";
 	
 	//path for y axis label
 	private Path path = new Path();
 	
 	//fields to record last touch point
 	private float touchX=-1, touchY=-1;
-	private Paint paintPoint, paintAxis, paintAxisLabel, paintSelectedLabel, paintLine;
+	private Paint paintPoint, paintAxis, paintAxisLabel, paintSelectedLabel, paintLine, paintMessage;
 	
 	//variable to store previous point
 	private ChartPoint previousPoint = null;
@@ -91,6 +92,11 @@ public class LineChart extends View {
 		paintLine.setColor(lineColor);
 		paintLine.setStrokeWidth(5f);
 		paintLine.setStrokeJoin(Join.MITER);
+		
+		paintMessage = new Paint();
+		paintMessage.setTypeface(Typeface.create("serif", Typeface.NORMAL));
+		paintMessage.setTextSize(32f);
+		paintMessage.setColor(axisLabelColor);
 	}
 	//overriding default paint method
 	@Override
@@ -112,10 +118,17 @@ public class LineChart extends View {
 		
 		//drawing axis label
 		canvas.drawText(xAxisLabel,(width - (xAxisLabel.length()*9))/2, height - 7, paintAxisLabel);//x axis label
-		
+
 		path.addRect(new RectF(2, (height-(yAxisLabel.length()*9))/2, 10, height), Direction.CW);
 		canvas.drawTextOnPath(yAxisLabel, path, 2, 2, paintAxisLabel);//y axis label
-
+		
+		//setting previous point to null
+		previousPoint = null;
+		
+		if(chartPoints.size()==0){
+			canvas.drawText(emptyDataMessage, (width-(emptyDataMessage.length()*14))/2, height/2, paintMessage);
+		}
+		
 		//drawing points
 		for(ChartPoint point : chartPoints){
 			float xPercent = point.getXValue()/XMAX;
@@ -133,9 +146,6 @@ public class LineChart extends View {
 			}
 			previousPoint = point;//setting current point as previous point
 		}
-		
-		//setting previous point to null
-		previousPoint = null;
 		
 		for(ChartPoint point : chartPoints){
 			//setting paint style to stroke
@@ -167,7 +177,7 @@ public class LineChart extends View {
 				canvas.drawText(point.getLable(), labelXPos+10, labelYPos+7, paintSelectedLabel);
 			}else{
 				canvas.drawCircle(point.getPosX(), point.getPosY(), POINT_RADIUS, paintPoint);
-			}			
+			}	
 		}
 		
 	}
@@ -242,9 +252,9 @@ public class LineChart extends View {
 	public void addPoint(ChartPoint point){
 		chartPoints.add(point);
 		if(point.getXValue()>XMAX)
-			XMAX = point.getXValue();
+			XMAX = point.getXValue()+1;
 		if(point.getYValue()>YMAX)
-			YMAX = point.getYValue();
+			YMAX = point.getYValue()+1;
 	}
 	public void clearPoints(){
 		chartPoints.clear();

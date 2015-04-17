@@ -12,12 +12,16 @@ import comp313.g2.smartgrocery.models.ListItem;
 import comp313.g2.smartgrocery.models.User;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.CalendarContract.Reminders;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -39,10 +43,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ListActivity extends Activity implements OnItemClickListener, OnClickListener {
+public class ListActivity extends Activity implements OnItemClickListener, OnClickListener, android.content.DialogInterface.OnClickListener {
 	private SharedPreferences prefs;
 	private List list;
 	private User user;
+	private boolean isReadOnly = false;
 	
 	private ImageView emptyView;
 	private ListView lvListItems;
@@ -54,6 +59,7 @@ public class ListActivity extends Activity implements OnItemClickListener, OnCli
 	private int selectedItemPosition = -1;
 	
 	private Dialog dialogAddItem, dialogUpdateItem;
+	private AlertDialog dialogBought;
 	
 	private EditText etItemName, etUpdateItemName;
 	private EditText etItemQuantity, etUpdateItemQuantity;
@@ -83,6 +89,12 @@ public class ListActivity extends Activity implements OnItemClickListener, OnCli
 		//loading list
 		Bundle bundle = getIntent().getExtras();
 		list = bundle.getParcelable("comp313.g2.smartgrocery.models.List");
+		
+		if(list!=null){
+			if(!list.Username.startsWith(user.Username)){
+				isReadOnly = true;
+			}
+		}
 		
 		//initializing list components
 		lvListItems = (ListView) findViewById(R.id.lvItems);
@@ -126,6 +138,13 @@ public class ListActivity extends Activity implements OnItemClickListener, OnCli
 		btnUpdate.setOnClickListener(this);
 		btnUpdateCancel = (Button) dialogUpdateItem.findViewById(R.id.btnCancel);
 		btnUpdateCancel.setOnClickListener(this);
+		
+
+		dialogBought = new Builder(ListActivity.this).create();
+		dialogBought.setTitle("Update Item?");
+		dialogBought.setMessage("Did you bought this item?");
+		dialogBought.setButton(AlertDialog.BUTTON_NEGATIVE, "No", this);
+		dialogBought.setButton(AlertDialog.BUTTON_POSITIVE, "Yes", this);
 	}
 	
 	@Override
@@ -185,13 +204,32 @@ public class ListActivity extends Activity implements OnItemClickListener, OnCli
 
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View view, int pos, long id) {
-		// TODO Auto-generated method stub
-		
+		if(!isReadOnly){
+			selectedItemPosition = pos;
+			
+			//populating dialog elements
+			ListItem item = listItems.get(pos);
+			
+			etUpdateItemName.setText(item.Name);
+			etUpdateItemQuantity.setText(String.valueOf(item.Quantity));
+			for(int i=0;i<spUpdateUnit.getCount();i++){
+				if(spUpdateUnit.getItemAtPosition(i).equals(item.Unit)){
+					spUpdateUnit.setSelection(i);
+					break;
+				}
+			}
+			if(item.Reminder!=null && item.Reminder.length()>0){
+				tvUpdateReminder.setText(item.Reminder);
+			}
+			dialogUpdateItem.show();
+		}
 	}
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.menu_itemlist, menu);
+		if(!isReadOnly){
+			getMenuInflater().inflate(R.menu.menu_itemlist, menu);
+		}
 		return true;
 	}
 	
@@ -201,7 +239,9 @@ public class ListActivity extends Activity implements OnItemClickListener, OnCli
 		selectedItemPosition = ((AdapterContextMenuInfo)menuInfo).position;
 		
 		super.onCreateContextMenu(menu, v, menuInfo);
-		getMenuInflater().inflate(R.menu.context_menu_list_items, menu);
+		if(!isReadOnly){
+			getMenuInflater().inflate(R.menu.context_menu_list_items, menu);
+		}
 	}
 	
 	@Override
@@ -305,7 +345,6 @@ public class ListActivity extends Activity implements OnItemClickListener, OnCli
 				}				
 			}
 			
-			
 			if(name==null || name.length()<=0){
 				etItemName.setError("Name is required!");
 			}else if(quantity==null || quantity.length()<=0){
@@ -369,7 +408,7 @@ public class ListActivity extends Activity implements OnItemClickListener, OnCli
 			String reminder = null;
 			
 			if(quantity==null || quantity.length()<=0){
-				etItemQuantity.setError("Quantity id required!");	
+				etItemQuantity.setError("Quantity is required!");	
 			}
 			
 			if(tvUpdateReminder.getText().toString().startsWith("Click") && tvUpdateReminder.getText().length()>11){
@@ -381,11 +420,7 @@ public class ListActivity extends Activity implements OnItemClickListener, OnCli
 			}
 			
 			if(null!=reminder){
-				if(GeneralHelpers.IsConnected(getApplicationContext())){
-					
-				}else{
-					Toast.makeText(getApplicationContext(), "Unable to connect!", Toast.LENGTH_SHORT).show();
-				}
+				dialogBought.show();
 			}
 		}else if(view == tvReminder || view ==tvUpdateReminder){
 			showDialog(DATE_PICKER_DIALOG);
@@ -439,4 +474,79 @@ public class ListActivity extends Activity implements OnItemClickListener, OnCli
 			}
 		}
 	};
+
+	@Override
+	public void onClick(DialogInterface arg0, int arg1) {
+		if(arg0 == dialogBought){
+			dialogBought.dismiss();
+			
+			final boolean bought;
+			if(arg1 == AlertDialog.BUTTON_NEGATIVE){
+				bought = false;
+			}
+			else{
+				bought = true;
+			}
+			
+			if(GeneralHelpers.IsConnected(getApplicationContext())){
+				
+				new Thread(new Runnable() {
+					@Override
+					public void run() {
+					try{
+						if(selectedItemPosition!=-1){
+							final ListItem listItem = listItems.get(selectedItemPosition);
+							listItem.Quantity =Float.parseFloat(etUpdateItemQuantity.getText().toString());
+							String reminder;
+							
+							if(tvUpdateReminder.getText().toString().startsWith("Click") || tvUpdateReminder.getText().length()<7 || tvUpdateReminder.getText().length()>11){
+								reminder="";
+							}else{
+								reminder = tvUpdateReminder.getText().toString();
+							}
+							listItem.Reminder = reminder;
+							
+							final boolean success = helper.UpdateListItem(user, listItem, bought);
+							
+							runOnUiThread(new Runnable() {
+								
+								@Override
+								public void run() {
+									if(success){
+										((BaseAdapter)lvListItems.getAdapter()).notifyDataSetChanged();
+										
+									}else{
+										Toast.makeText(getApplicationContext(), "Unable to update!", Toast.LENGTH_SHORT).show();
+									}
+								}
+							});
+						}
+					}catch (final Exception e) {
+						runOnUiThread(new Runnable() {
+							
+							@Override
+							public void run() {
+								Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+							}
+						});
+					}finally{
+							runOnUiThread(new Runnable() {
+							
+							@Override
+							public void run() {
+								btnUpdate.setEnabled(true);
+								btnUpdateCancel.setEnabled(true);
+								dialogUpdateItem.dismiss();
+								selectedItemPosition = -1;
+							}
+						});
+					}
+					
+					}
+				}).start();
+			}else{
+				Toast.makeText(getApplicationContext(), "Unable to connect!", Toast.LENGTH_SHORT).show();
+			}
+		}
+	}
 }

@@ -14,6 +14,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import comp313.g2.smartgrocery.models.ItemHistory;
 import comp313.g2.smartgrocery.models.ListItem;
 import comp313.g2.smartgrocery.models.Notification;
 import comp313.g2.smartgrocery.models.Template;
@@ -289,18 +290,27 @@ public class ServiceHelper {
 
 	
 	public boolean UpdateListItem(User user, ListItem listItem, boolean addToHistory) throws Exception {
-		/*String response = PostData(
-				baseURL + "list/delete",
+		String response = PostData(
+				baseURL + "listitems/update",
 				"{" +
 				"\"user\":{" +
 					"\"Username\":\"" + user.Username + "\"," +
 					 "\"SESS_KEY\":\""+ user.SESS_KEY + "\"" +
 					 "}, " +
-				"\"listId\":\""+listId+"\"}").replace("\"", "");
+					 "\"listItem\":{"
+					 	+ "\"Id\":\""+listItem.Id+"\","
+						+ "\"Name\":\""+listItem.Name+"\","
+						+ "\"Quantity\":\""+listItem.Quantity+"\","
+						+ "\"Reminder\":\""+listItem.Reminder+"\","
+						+ "\"Unit\":\""+listItem.Unit+"\","
+						+ "\"ListId\":\""+listItem.ListId+"\","
+						+ "\"LastModified\":\""+ GeneralHelpers.GetCurrentDateTime()+"\""
+						+"}," +
+						"\"addToHistory\":\""+addToHistory+"\"}").replace("\"", "");
 		
 		if (!response.equals("")) {
 			return Boolean.parseBoolean(response);
-		}*/
+		}
 		return false;
 	}
 	
@@ -319,6 +329,79 @@ public class ServiceHelper {
 			return Boolean.parseBoolean(response);
 		}
 		return false;
+	}
+	
+	public ArrayList<String> getHistoryItems(User user) throws Exception {
+		ArrayList<String> items = new ArrayList<String>();
+		
+		String response = PostData(
+				baseURL + "history/getItems",
+				"{" +
+					"\"Username\":\"" + user.Username + "\"," +
+					 "\"SESS_KEY\":\""+ user.SESS_KEY + "\"" +
+					 "}");
+		
+		if (!response.equals("")) {
+			JSONArray array = new JSONArray(response);
+			for(int i=0;i<array.length();i++){
+				items.add(array.getString(i));
+			}
+		}
+		return items;
+	}
+	
+
+	
+	public ArrayList<String> getHistoryYears(User user, String itemName) throws Exception {
+		ArrayList<String> items = new ArrayList<String>();
+		
+		String response = PostData(
+				baseURL + "history/getYears",
+				"{" +
+				"\"user\":{" +
+					"\"Username\":\"" + user.Username + "\"," +
+					 "\"SESS_KEY\":\""+ user.SESS_KEY + "\"" +
+					 "}," +
+					 "\"itemName\":\""+itemName+"\"}");
+		
+		if (!response.equals("")) {
+			JSONArray array = new JSONArray(response);
+			for(int i=0;i<array.length();i++){
+				items.add(array.getString(i));
+			}
+		}
+		return items;
+	}
+	
+	public ArrayList<ItemHistory> getItemHistory(User user, String itemName,String month,String year) throws Exception {
+		ArrayList<ItemHistory> items = new ArrayList<ItemHistory>();
+		
+		String response = PostData(
+				baseURL + "history/get",
+				"{" +
+				"\"user\":{" +
+					"\"Username\":\"" + user.Username + "\"," +
+					 "\"SESS_KEY\":\""+ user.SESS_KEY + "\"" +
+					 "}," +
+					 "\"itemName\":\""+itemName+"\"," +
+					 "\"month\":\""+month+"\"," +
+					 "\"year\":\""+year+"\"}");
+		
+		if (!response.equals("")) {
+			JSONArray array = new JSONArray(response);
+			for(int i=0;i<array.length();i++){
+				ItemHistory item = new ItemHistory();
+				JSONObject data = array.getJSONObject(i);
+				
+				item.Id = data.getLong("Id");
+				item.Name = itemName;
+				item.Quantity =(float) data.getDouble("Quantity");
+				item.Unit = data.getString("Unit");
+				item.Date = data.getString("Date");
+				items.add(item);
+			}
+		}
+		return items;
 	}
 	
 	private String PostData(String serviceUrl, String data) throws Exception {

@@ -129,6 +129,7 @@ public class MainActivity extends Activity {
             // display view for selected nav drawer item
             displayView(position);
         }
+        
     }
  
     @Override

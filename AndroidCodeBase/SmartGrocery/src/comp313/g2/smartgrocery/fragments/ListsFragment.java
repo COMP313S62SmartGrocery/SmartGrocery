@@ -466,9 +466,19 @@ public class ListsFragment extends Fragment implements OnItemClickListener,
 
 		// showing menu
 		super.onCreateContextMenu(menu, v, menuInfo);
-
+		
 		MenuInflater inflater = getActivity().getMenuInflater();
 		inflater.inflate(R.menu.context_menu_lists, menu);
+		
+
+		List currentlist = list.get(selectedItemPosition);
+		if(currentlist!=null){
+			if(!currentlist.Username.startsWith(user.Username)){
+				menu.removeItem(R.id.itemDuplicate);
+				menu.removeItem(R.id.itemRename);
+				menu.removeItem(R.id.itemShare);
+			}
+		}
 	}
 
 	@Override
@@ -482,9 +492,14 @@ public class ListsFragment extends Fragment implements OnItemClickListener,
 
 					public void run() {
 						try {
-							final boolean isDeleted = helper.DeleteList(user,
+							final boolean isDeleted;
+							if(!listItem.Username.startsWith(user.Username)){
+									isDeleted = true;//invoke un-share method 
+							}else{
+							
+							isDeleted = helper.DeleteList(user,
 									listItem.Id);
-
+							}
 							getActivity().runOnUiThread(new Runnable() {
 
 								@Override

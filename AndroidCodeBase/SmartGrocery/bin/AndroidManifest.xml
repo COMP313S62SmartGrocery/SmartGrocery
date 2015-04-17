@@ -35,6 +35,7 @@
         <activity android:name="comp313.g2.smartgrocery.ListActivity"></activity>
         <activity android:name="comp313.g2.smartgrocery.TemplateActivity"></activity>
         <activity android:name="comp313.g2.smartgrocery.TemplateItemsActivity"></activity>
+        <activity android:name="comp313.g2.smartgrocery.ReportActivity"></activity>
     </application>
 
 </manifest>
